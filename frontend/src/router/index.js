@@ -1,6 +1,8 @@
 import { createRouter,createWebHistory } from 'vue-router';
-import Main from '../view/Main.vue';
-import Login from '../view/Login.vue';
+import Main from '../views/Main.vue';
+import Login from '../views/Login.vue';
+import Join from '../views/Join.vue';
+
 
 export default createRouter({
     history: createWebHistory(),
@@ -14,6 +16,11 @@ export default createRouter({
             path: '/login',
             name: 'Login',
             component: Login
+        },
+        {
+            path: '/join',
+            name: 'Join',
+            component: Join
         }
     ]
 })
