@@ -42,7 +42,7 @@ router.post('/login', function(req, res) {
 
 // 회원가입
 router.get('/join', function(req, res) {
-	res.render('join');
+	res.render('join_view');
 });
 
 router.post('/join', function(req, res){
@@ -51,12 +51,12 @@ router.post('/join', function(req, res){
 	var repassword = req.body.repassword;
 
 	if (password != repassword) {
-		res.render('join', {guide:'비밀번호가 일치하지 않습니다.'});
+		res.render('join_view', {guide:'비밀번호가 일치하지 않습니다.'});
 	} else {
 		var sql = 'select id from User where id=?';
 		db.query(sql, [id], function(err, rows, fields){
 			if(rows[0]!=undefined) {
-				res.render('join', {guide:'이미 사용중인 아이디입니다.'});
+				res.render('join_view', {guide:'이미 사용중인 아이디입니다.'});
 			} else {
 				var sql2 = 'insert into User(id, password) values(?, ?)';
 				db.query(sql2, [id, password], function(err, rows, fields){
