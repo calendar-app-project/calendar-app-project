@@ -25,7 +25,7 @@ export default ({
     },
     methods: {
         login () {
-            axios.get('/user/login', {
+            axios.post('/user/login', {
                 user: this.user
             })
             .then((res)=> console.log(res));
