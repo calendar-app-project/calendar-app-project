@@ -4,6 +4,7 @@ var mysql = require('mysql');
 var session = require('express-session'); // session 객체
 var mysqlstore = require("express-mysql-session")(session);
 
+
 app.use(session({
 	key: "session_cookie_name",
 	secret: "session_cookie_secret",
