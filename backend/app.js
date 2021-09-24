@@ -3,6 +3,7 @@ var app = express();
 var mysql = require('mysql');
 var session = require('express-session'); // session 객체
 var mysqlstore = require("express-mysql-session")(session);
+var path = require('path');
 
 
 app.use(session({
@@ -27,6 +28,7 @@ app.set('view engine', 'jade');
 app.set('views', './views');
 
 var userRouter = require('./routes/user');
+app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/user', userRouter);
 
 // 메인 화면

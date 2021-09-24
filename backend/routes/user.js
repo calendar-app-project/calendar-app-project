@@ -14,6 +14,8 @@ db.connect();
 app.set('view engine', 'jade');
 app.set('views', './views');
 
+const axios = require('axios');
+
 // 로그인
 router.get('/login', function(req, res) {
 	res.render('login_view');
@@ -40,35 +42,45 @@ router.post('/login', function(req, res) {
 	})
 });
 
+/*router.post('/login', function(req, res) {
+	console.log(req);
+	res.json({message:"success"});
+})*/
+
 // 회원가입
 router.get('/join', function(req, res) {
-	res.render('join_view');
+	res.render('join_view',{guide:'영소문자 / 숫자 / 특수문자를 조합하여 입력해주세요'});
 });
 
 router.post('/join', function(req, res){
 	var id = req.body.id;
 	var password = req.body.password;
 	var repassword = req.body.repassword;
+	var password_standard = /^.*(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).*$/;
 
 	if (password != repassword) {
 		res.render('join_view', {guide:'비밀번호가 일치하지 않습니다.'});
 	} else {
-		var sql = 'select id from User where id=?';
-		db.query(sql, [id], function(err, rows, fields){
-			if(rows[0]!=undefined) {
-				res.render('join_view', {guide:'이미 사용중인 아이디입니다.'});
-			} else {
-				var sql2 = 'insert into User(id, password) values(?, ?)';
-				db.query(sql2, [id, password], function(err, rows, fields){
-					if(err) {
-						console.log(err);
-						res.status(404).send('회원가입에 실패하였습니다.');
-					} else {
-						res.redirect('/');
-					}
-				});
-			}
-		});
+		if (!password_standard.test(password)) {
+			res.render('join_view', {guide:'비밀번호 기준을 만족하지 못했습니다.(영소문자 / 숫자 / 특수문자 조합)'})
+		} else {
+			var sql = 'select id from User where id=?';
+			db.query(sql, [id], function(err, rows, fields){
+				if(rows[0]!=undefined) {
+					res.render('join_view', {guide:'이미 사용중인 아이디입니다.'});
+				} else {
+					var sql2 = 'insert into User(id, password) values(?, ?)';
+					db.query(sql2, [id, password], function(err, rows, fields){
+						if(err) {
+							console.log(err);
+							res.status(404).send('회원가입에 실패하였습니다.');
+						} else {
+							res.redirect('/');
+						}
+					});
+				}
+			});
+		}
 	}
 });
 
