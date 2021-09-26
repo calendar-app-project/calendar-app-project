@@ -8,7 +8,7 @@
         <label for="pwd" class="form-label">비밀번호</label>
         <input type="text" class="form-control" id="pwd" v-model="user.password">
     </div>
-    <button type="submit" class="btn btn-secondary mb-3" :click="login">로그인</button>
+    <button type="submit" class="btn btn-secondary mb-3" @click="login">로그인</button>
 </div>
 </template>
 
@@ -25,10 +25,11 @@ export default ({
     },
     methods: {
         login () {
-            axios.post('/user/login', {
+            axios.post('/api/user/login', {
                 user: this.user
             })
-            .then((res)=> console.log(res));
+            .then((res)=> console.log("res:", res))
+            .catch((err) => console.log(err))
         }
     }
 })
