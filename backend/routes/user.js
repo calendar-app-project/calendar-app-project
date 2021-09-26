@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false}))
+app.use(bodyParser.json());
 var db = mysql.createConnection({
 	host : 'localhost',
 	port : 3307,
@@ -17,7 +20,7 @@ app.set('views', './views');
 const axios = require('axios');
 
 // 로그인
-router.get('/login', function(req, res) {
+/*router.get('/login', function(req, res) {
 	res.render('login_view');
 }); // localhost:3000/user/login
 
@@ -40,12 +43,12 @@ router.post('/login', function(req, res) {
 			res.render('login_view', {guide:'존재하지 않는 아이디입니다.'});
 		}
 	})
-});
+});*/
 
-/*router.post('/login', function(req, res) {
-	console.log(req);
-	res.json({message:"success"});
-})*/
+router.post('/login', function(req, res) {
+	console.log("req:", req.body);
+	res.json({message:"test"});
+});
 
 // 회원가입
 router.get('/join', function(req, res) {
