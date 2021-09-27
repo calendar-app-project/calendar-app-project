@@ -25,9 +25,10 @@ export default ({
     },
     methods: {
         login () {
-            axios.post('/api/user/login', {
+            axios.post('/api/user/login',{
                 user: this.user
-            })
+            }
+            )
             .then((res)=> console.log("res:", res))
             .catch((err) => console.log(err))
         }

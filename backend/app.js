@@ -5,7 +5,8 @@ var session = require('express-session'); // session 객체
 var mysqlstore = require("express-mysql-session")(session);
 var path = require('path');
 const axios = require('axios');
-
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use(session({
 	key: "session_cookie_name",
@@ -18,7 +19,7 @@ app.use(session({
 		user : 'root',
 		password : '1111',
 		database : 'project'
-	})
+		})
 }));
 
 var cookieparser = require('cookie-parser');
