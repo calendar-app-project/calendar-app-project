@@ -18,9 +18,11 @@ app.set('views', './views');
 const axios = require('axios');
 
 // 로그인
+
 router.get('/login', function(req, res) {
 	res.render('login_view');
 }); // localhost:3000/user/login
+
 
 router.post('/login', function(req, res) {
 	var id = req.body.id;
@@ -41,8 +43,7 @@ router.post('/login', function(req, res) {
 			res.render('login_view', {guide:'존재하지 않는 아이디입니다.'});
 		}
 	})
-});
-
+})
 router.post('/login', function(req, res) {
 	console.log("req:", req.body);
 	res.json({message:"test"});

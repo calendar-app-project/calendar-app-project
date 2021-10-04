@@ -6,7 +6,14 @@ import router from './router/index.js'
 import 'bootstrap/dist/css/bootstrap.css'
 //import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+ import { faUserCircle } from '@fortawesome/free-solid-svg-icons' 
+ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome' 
+ library.add(faUserCircle)
+
+
 createApp(App)
 .use(router)
 //.use(Bootstrap)
+.component('font-awesome-icon', FontAwesomeIcon)
 .mount('#app')

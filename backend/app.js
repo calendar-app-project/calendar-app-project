@@ -40,15 +40,15 @@ app.get('/', function(req, res){
 	}
 });
 
-/*app.post('/api/user/login', (req, res) => {
+app.post('/api/user/login', (req, res) => {
     res.json({
         state: 200,
         message: 'Hello World'
     })
-});*/
+});
 
 app.listen(3000, function(){
 	console.log('Connected 3000 port!');
 });
 
-// conn.end();
+conn.end();
