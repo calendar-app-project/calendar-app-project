@@ -24,15 +24,15 @@ app.use(session({
 
 var cookieparser = require('cookie-parser');
 app.locals.pretty = true;
-app.set('view engine', 'jade');
-app.set('views', './views');
+//app.set('view engine', 'jade');
+//app.set('views', './views');
 
 var userRouter = require('./routes/user');
 app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
 
 // 메인 화면
-app.get('/', function(req, res){
+/*app.get('/', function(req, res){
 	if (req.session.is_logined) {
 		res.render('main_view', {user_id:req.session.nickname});
 	} else {
@@ -45,10 +45,10 @@ app.post('/api/user/login', (req, res) => {
         state: 200,
         message: 'Hello World'
     })
-});
+});*/
 
 app.listen(3000, function(){
 	console.log('Connected 3000 port!');
 });
 
-conn.end();
+// conn.end(); -> 서버 연결 중에는 DB도 연결 중이기에 미리 연결을 끊으면 오류가 뜸(주석 처리 한 이유)
