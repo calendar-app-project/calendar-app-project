@@ -24,7 +24,8 @@ router.post('/login', function(req, res) {
 				req.session.is_logined = true;
 				req.session.nickname = rows[0].id;
 				req.session.save(function(){
-					res.json({message:"로그인에 성공하였습니다.(세션 연결)"});
+					res.json({
+						message:"로그인에 성공하였습니다.(세션 연결)"});
 				});
 				//res.json({message:"로그인에 성공하였습니다."});
 			} else {
@@ -81,12 +82,12 @@ router.post('/profile', function(req,res) {
 		}
 	});
 });
-
+*/
 // 로그아웃
 router.get('/logout', function(req, res) {
 	req.session.destroy(function(err){
-		res.redirect('/');
-	})
-});*/
+         res.redirect('/');
+		})
+});
 
 module.exports = router;

@@ -10,4 +10,8 @@ function joinUser(userData) {
     return axios.post('/api/user/join', userData)
 }
 
-export {  loginUser,joinUser };
+function logoutUser() {
+    return axios.get('/api/user/logout')
+}
+
+export {  loginUser, joinUser, logoutUser };

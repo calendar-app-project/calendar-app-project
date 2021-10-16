@@ -2,14 +2,23 @@
     <header>
         <div class="navbar"
             v-for="nav in navigations" :key="nav.name">
-            <RouterLink class="nav" :to="nav.href">
+            <RouterLink v-if="!$store.state.user.isLogin" class="nav" :to="nav.href">
                 {{ nav.name }}
+            </RouterLink>
+        </div>
+        <div class="navbar" v-if="$store.state.user.isLogin">
+            <div type="button" class="nav" @click="logout">
+                Logout
+            </div>
+            <RouterLink class="nav" to="/profile">
+                Profile
             </RouterLink>
         </div>
     </header>
 </template>
 
 <script>
+import { logoutUser } from '../api/index';
 
 export default ({
     data() {
@@ -22,8 +31,19 @@ export default ({
                 {
                     name: 'Join',
                     href: '/join'
-                }
-            ]
+                },
+                
+            ],
+        }
+    },
+    methods: {
+        async logout(){
+            try {
+                await logoutUser();
+                await this.$store.dispatch('user/logout');
+            }catch(err){
+                console.log(err);
+            }
         }
     }
 })
