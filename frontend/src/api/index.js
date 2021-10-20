@@ -14,4 +14,8 @@ function logoutUser() {
     return axios.get('/api/user/logout')
 }
 
-export {  loginUser, joinUser, logoutUser };
+function leaveUser(userData) {
+    return axios.delete('/api/user/leave', userData)
+}
+
+export {  loginUser, joinUser, logoutUser, leaveUser };

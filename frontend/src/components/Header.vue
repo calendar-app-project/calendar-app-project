@@ -41,6 +41,7 @@ export default ({
             try {
                 await logoutUser();
                 await this.$store.dispatch('user/logout');
+                this.$router.push({name: 'Main'});
             }catch(err){
                 console.log(err);
             }

@@ -2,7 +2,7 @@ import { createRouter,createWebHistory } from 'vue-router';
 import Main from '../views/Main.vue';
 import Login from '../views/Login.vue';
 import Join from '../views/Join.vue';
-
+import Profile from '../views/Profile.vue';
 
 
 export default createRouter({
@@ -23,5 +23,10 @@ export default createRouter({
             name: 'Join',
             component: Join
         },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: Profile
+        }
     ]
 })

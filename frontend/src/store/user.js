@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     state: () => {
         return {
-            userId: '',
+            userId: null,
             isLogin: false
         }
     },
@@ -26,7 +26,6 @@ export default {
         },
         async logout({ commit }){
             commit('deleteState');
-            location.reload();
         }
     },
 }

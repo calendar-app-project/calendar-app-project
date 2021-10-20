@@ -25,6 +25,7 @@ router.post('/login', function(req, res) {
 				req.session.nickname = rows[0].id;
 				req.session.save(function(){
 					res.json({
+						userId: id, //id 넘겨주는거 계속 필요해서 일단 넣어놨어!
 						message:"로그인에 성공하였습니다.(세션 연결)"});
 				});
 				//res.json({message:"로그인에 성공하였습니다."});
@@ -59,9 +60,10 @@ router.post('/join', function(req, res){
 router.get('/profile', function(req,res) {
 	res.render('user_view', {user_id:req.session.nickname, guide:'회원탈퇴를 원하시면 비밀번호를 입력해주세요.'});
 });
-
+*/
 // 회원탈퇴
-router.post('/profile', function(req,res) {
+router.post('/leave', function(req,res) {
+	console.log(req, req.session.nickname);
 	var id = req.session.nickname;
 	var password = req.body.password;
 	var sql = 'select password from user where id=?'
@@ -82,7 +84,7 @@ router.post('/profile', function(req,res) {
 		}
 	});
 });
-*/
+
 // 로그아웃
 router.get('/logout', function(req, res) {
 	req.session.destroy(function(err){

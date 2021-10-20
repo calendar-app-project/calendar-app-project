@@ -3,7 +3,7 @@
         <div>
             <h1>Main 페이지</h1>
             <div>
-                {{ userName }}
+                {{ userId }}
             </div>
         </div>
    </div>
@@ -13,7 +13,7 @@
 
 export default ({
     computed: {
-        userName() {
+        userId() {
             return this.$store.state.user.userId;
         }
     },
