@@ -76,10 +76,11 @@ export default {
       async onSubmit(userData, actions) {
         try{
           const res = await joinUser(userData);
-          if(res.data.message === "회원가입에 성공하였습니다"){
+          if(res.data.message === "join success"){
+            console.log(res); // 프론트에서 console log 확인하려고 추가해놓았음!
             this.isModal = true;
 
-          }if(res.data.message === "이미 사용중인 아이디입니다"){
+          }if(res.data.message === "id fail"){
             actions.setFieldError('id', '이미 사용중인 아이디 입니다.');
           }
         }catch(err) {

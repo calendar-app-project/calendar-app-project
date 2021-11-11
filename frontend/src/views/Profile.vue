@@ -15,8 +15,10 @@
             <div class="mb-3 confirmInfo" :class="{ 'animation': isLeave}">
                 <label class="form-label">비밀번호를 입력하세요.</label>
                 <div class="passwordInput">
-                    <input type="password" class="form-control" id="formGroupExampleInput" v-model="password"/>
-                    <button type="submit" class="btn btn-secondary confirmPwd" @click="confirmPwd(password)">확인</button>
+                    <form class="passwordInput" @submit.prevent="confirmPwd(password)">
+                        <input name="password" type="password" class="form-control" id="formGroupExampleInput" v-model="password"/>
+                        <button type="submit" class="btn btn-secondary confirmPwd">확인</button>
+                    </form>
                 </div>
             </div>
         </transition>
@@ -47,8 +49,11 @@ export default ({
         },
         async confirmPwd(password) {
             try {
-                const res = await leaveUser(password);
-                console.log(res);
+                const res = await leaveUser({password});
+                if(res.data.message === 'leave success'){
+                    await this.$store.dispatch('user/leave');
+                    this.goHome();
+                } // message나 status값에 따라서 세부적인 구분 필요할 듯!
             }catch(err) {
                 console.log(err);
             }

@@ -10,12 +10,14 @@ function joinUser(userData) {
     return axios.post('/api/user/join', userData)
 }
 
+//로그아웃 api
 function logoutUser() {
     return axios.get('/api/user/logout')
 }
 
+//회원탈퇴 api
 function leaveUser(userData) {
-    return axios.delete('/api/user/leave', userData)
+    return axios.post('/api/user/leave', userData)
 }
 
 export {  loginUser, joinUser, logoutUser, leaveUser };

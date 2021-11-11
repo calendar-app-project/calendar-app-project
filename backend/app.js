@@ -1,3 +1,4 @@
+// 모듈 불러오기
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
@@ -5,14 +6,21 @@ var session = require('express-session'); // session 객체
 var mysqlstore = require("express-mysql-session")(session);
 var path = require('path');
 const axios = require('axios');
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+// express -> bodyParser
 
+// var cookieParser = require('cookie-parser');
+// app.use(cookieParser());
+
+// session 사용
 app.use(session({
-	key: "session_cookie_name",
+	key: "session_cookie_name", // 쿠키 name
 	secret: "session_cookie_secret",
 	resave: false,
 	saveUninitialized: true,
+	// cookie : { maxAge : 30000 }, // 30초
 	store: new mysqlstore({
 		host : 'localhost',
 		port : 3307,
@@ -22,16 +30,16 @@ app.use(session({
 		})
 }));
 
-var cookieparser = require('cookie-parser');
-app.locals.pretty = true;
-//app.set('view engine', 'jade');
-//app.set('views', './views');
-
+// 회원 관리 라우팅
 var userRouter = require('./routes/user');
 app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
 
-// 메인 화면
+// 3000번 port listening
+app.listen(3000, function(){
+	console.log('Connected 3000 port!');
+});
+
 /*app.get('/', function(req, res){
 	if (req.session.is_logined) {
 		res.render('main_view', {user_id:req.session.nickname});
@@ -47,8 +55,4 @@ app.post('/api/user/login', (req, res) => {
     })
 });*/
 
-app.listen(3000, function(){
-	console.log('Connected 3000 port!');
-});
-
-// conn.end(); -> 서버 연결 중에는 DB도 연결 중이기에 미리 연결을 끊으면 오류가 뜸(주석 처리 한 이유)
+// conn.end();

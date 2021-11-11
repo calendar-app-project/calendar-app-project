@@ -52,7 +52,7 @@ export default {
         try {
         const res = await loginUser(userData);
            console.log(res);
-           if(res.data.message === '로그인에 성공하였습니다.(세션 연결)'){
+           if(res.data.message === 'login success'){
               await this.$store.dispatch('user/login', res.data.userId);
               this.$router.push({name: 'Main'});
               }else { //user 정보 없는 경우

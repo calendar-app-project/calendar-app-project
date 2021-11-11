@@ -26,6 +26,9 @@ export default {
         },
         async logout({ commit }){
             commit('deleteState');
+        },
+        async leave({ commit }){
+            commit('deleteState');
         }
     },
 }
