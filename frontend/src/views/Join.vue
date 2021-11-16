@@ -76,11 +76,9 @@ export default {
       async onSubmit(userData, actions) {
         try{
           const res = await joinUser(userData);
-          if(res.data.message === "join success"){
-            console.log(res); // 프론트에서 console log 확인하려고 추가해놓았음!
+          if(!res.data.resultData.duplicatedId){
             this.isModal = true;
-
-          }if(res.data.message === "id fail"){
+          }else{
             actions.setFieldError('id', '이미 사용중인 아이디 입니다.');
           }
         }catch(err) {

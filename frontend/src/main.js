@@ -2,20 +2,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index.js'
-//import Bootstrap from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
-//import 'bootstrap-vue/dist/bootstrap-vue.css'
 import store from './store/index.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
- import { faUserCircle } from '@fortawesome/free-solid-svg-icons' 
+ import { faUserCircle, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons' 
  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome' 
- library.add(faUserCircle)
+ library.add(faUserCircle, faChevronRight, faChevronLeft)
 
 
 createApp(App)
 .use(router)
 .use(store)
-//.use(Bootstrap)
 .component('font-awesome-icon', FontAwesomeIcon)
 .mount('#app')

@@ -1,21 +1,19 @@
 <template>
    <div class="container">
-        <div>
-            <h1>Main 페이지</h1>
-            <div>
-                {{ userId }}
-            </div>
-        </div>
+        <Calendar/>
    </div>
 </template>
 
 <script>
+import Calendar from '../components/Calendar.vue';
 
 export default ({
-    computed: {
-        userId() {
-            return this.$store.state.user.userId;
-        }
+    components: {
+        Calendar
     },
+    
 })
 </script>
+
+<style scoped>
+</style>

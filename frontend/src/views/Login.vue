@@ -48,16 +48,16 @@ export default {
     },
   },
   methods: {
-      async onSubmit(userData,{ resetForm }) {
+      async onSubmit(userData, actions) {
         try {
-        const res = await loginUser(userData);
-           console.log(res);
-           if(res.data.message === 'login success'){
+           const res = await loginUser(userData);
+           if(res.data.resultData.isMatch && res.data.userId){
+              console.log(res);
               await this.$store.dispatch('user/login', res.data.userId);
               this.$router.push({name: 'Main'});
-              }else { //user 정보 없는 경우
-                 this.loginErr = true;
-                 resetForm();
+              }else {
+                 actions.setFieldError('id', '아이디 또는 비밀번호가 일치하지 않습니다.');
+                 actions.setFieldError('password', '아이디 또는 비밀번호가 일치하지 않습니다.');
               }
         }catch(err) {
           console.log(err);

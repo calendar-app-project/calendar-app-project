@@ -10,8 +10,8 @@
             <div type="button" class="nav" @click="logout">
                 Logout
             </div>
-            <RouterLink class="nav" to="/profile">
-                Profile
+            <RouterLink class="nav id" to="/profile">
+                {{ $store.state.user.userId + '님' }}💚
             </RouterLink>
         </div>
     </header>
@@ -60,5 +60,8 @@ export default ({
     text-decoration: none;
     margin: 0 10px;
     color:gray;
+}
+.id {
+    color:rgb(132, 218, 132);
 }
 </style>

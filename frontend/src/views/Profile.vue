@@ -20,6 +20,7 @@
                         <button type="submit" class="btn btn-secondary confirmPwd">확인</button>
                     </form>
                 </div>
+                <div class="pwdInfo" :class="{ 'active': notMatch }">비밀번호가 일치하지 않습니다.</div>
             </div>
         </transition>
     </div>
@@ -33,6 +34,7 @@ export default ({
         return {
             isLeave: false,
             password: '',
+            notMatch: false,
         }
     },
     computed: {
@@ -50,10 +52,12 @@ export default ({
         async confirmPwd(password) {
             try {
                 const res = await leaveUser({password});
-                if(res.data.message === 'leave success'){
+                if(res.data.resultData.isPwdMatch){
                     await this.$store.dispatch('user/leave');
                     this.goHome();
-                } // message나 status값에 따라서 세부적인 구분 필요할 듯!
+                }else {
+                    this.notMatch = true;
+                }
             }catch(err) {
                 console.log(err);
             }
@@ -102,6 +106,14 @@ export default ({
 .passwordInput > .form-control {
     flex-basis: 68%;
     margin: 10px;
+}
+.pwdInfo{
+    opacity: 0;
+}
+.active {
+    opacity: 1;
+    font-size: 12px;
+    color:rgb(209, 29, 29);
 }
 
 </style>

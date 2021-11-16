@@ -12,17 +12,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // DB 연결
 var db = mysql.createConnection({
 	host : 'localhost',
-	port : 3307,
+	port : 3306,
 	user : 'root',
 	password : '1111',
 	database : 'project'
 });
 db.connect();
 
+/*
+로그인 - existedId로 할지 isMatch로 할지 고민하다가, 로그인 성공/실패 여부니까 isMatch = true(성공)/false(실패)로 설정
+회원가입 - 아이디 중복 여부 따지는 duplicatedId = true(중복 o, 가입 실패)/false(중복 x, 가입 성공)로 설정
+회원탈퇴 - 탈퇴 성공/실패 여부로 나뉘는 거라서 isLeave = true(성공)/false(실패)로 설정
+*/
+
 // 1. 로그인
 router.post('/login', function(req, res) {
 	var id = req.body.id;
 	var password = req.body.password;
+	let resultData ={};
 	var sql = 'select * from User where id=?';
 	db.query(sql, [id], function(err, rows, fields){
 		if(err){
@@ -41,18 +48,26 @@ router.post('/login', function(req, res) {
 						if(id == rows[0].id && hash == rows[0].password) { // 아이디, 비밀번호 일치(로그인 성공)
 							req.session.is_logined = true;
 							req.session.nickname = rows[0].id;
-							req.session.save(function(){
+							req.session.save(function() {
+								resultData.isMatch = true; // 아이디, 비밀번호 일치 여부 = true
 								res.status(200).json({
 									userId: id,
-									message:"login success"});
+									resultData,
+									message : "login success"}); // 로그인 성공
 							});
 						} else { // 비밀번호 틀렸을 때
-							res.status(400).json({message:"password fail"});
+							resultData.isMatch = false; // 비밀번호랑 아이디 그냥 통일하기로 해서 우선 false 값 줬음
+							res.json({
+								resultData,
+								message : "login fail"}); // 로그인 실패
 						}
 					}
 				}); // crypto
 			} else { // 아이디가 존재하지 않을 때
-				res.status(400).json({message:"id fail"});
+				resultData.isMatch = false; // 아이디 존재 여부 = false
+				res.json({
+					resultData,
+					message : "login fail"}); // 로그인 실패
 			}
 		}
 	});
@@ -62,6 +77,7 @@ router.post('/login', function(req, res) {
 router.post('/join', function(req, res){
 	var id = req.body.id;
 	var password = req.body.password;
+	let resultData = {};
 	var sql = 'select id from User where id=?';
 	db.query(sql, [id], function(err, rows, fields){
 		if(err){
@@ -69,8 +85,11 @@ router.post('/join', function(req, res){
 			res.status(500);
 		} else {
 			if(rows[0]!=undefined) { // 아이디가 이미 존재할 때
-				res.status(400).json({ message:"id fail"});
-			} else {
+				resultData.duplicatedId = true; // 중복 여부 = true
+				res.json({
+					resultData,
+					message : "id duplicated"}); // 가입 실패(아이디 중복)
+			} else { // false
 				// 비밀번호 암호화 후 DB에 회원 정보 등록
 				crypto.randomBytes(64, function(err, buf) {
 					if(err) {
@@ -89,8 +108,11 @@ router.post('/join', function(req, res){
 									if(err) {
 										console.log(err);
 										res.status(500);
-									} else { // 회원 가입 성공
-										res.status(200).json({message:"join success"});
+									} else {
+										resultData.duplicatedId = false; // 중복 여부 = false
+										res.status(200).json({
+											resultData,
+											message : "join success"}); // 가입 성공
 									}
 								});
 							}
@@ -106,6 +128,7 @@ router.post('/join', function(req, res){
 router.post('/leave', function(req, res) {
 	var id = req.session.nickname;
 	var password = req.body.password;
+	let resultData = {};
 	var sql = 'select * from User where id=?';
 	db.query(sql, [id], function(err, rows, fields) {
 		if(err){
@@ -127,12 +150,18 @@ router.post('/leave', function(req, res) {
 								res.status(500);
 							} else { // 회원 탈퇴 성공
 								req.session.destroy(function(err){
-									res.status(200).json({message:"leave success"});
+									resultData.isPwdMatch = true; // 탈퇴 성공 여부 true
+									res.status(200).json({
+										resultData,
+										message : "leave success"}); // 회원 탈퇴 성공
 								});
 							}
 						});
 					} else { // 회원 탈퇴 실패(비밀번호가 틀린 경우)
-						res.status(400).json({message:"password fail"});
+						resultData.isPwdMatch = false; // 탈퇴 성공 여부 false
+						res.json({
+							resultData,
+							message : "leave fail"}); // 회원 탈퇴 실패
 					}
 				}
 			}); // crypto
