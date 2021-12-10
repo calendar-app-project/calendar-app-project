@@ -2,7 +2,7 @@
   <Form @submit="onSubmit" :validation-schema="schema">
      <div class="container mb-4 w-25">
         <div class="userIcon">
-          <font-awesome-icon icon="user-circle"  size="5x" color="lightgray"/>
+          <font-awesome-icon icon="circle-user"  size="5x" color="lightgray"/>
         </div>
         <Field name="id" type="id"  v-slot="{ field, errorMessage, meta }">
           <div class="field">

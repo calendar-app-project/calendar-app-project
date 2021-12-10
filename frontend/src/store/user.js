@@ -3,7 +3,8 @@ export default {
     state: () => {
         return {
             userId: null,
-            isLogin: false
+            isLogin: false,
+            modalStatus: false,
         }
     },
     getters: {},
@@ -15,6 +16,9 @@ export default {
         deleteState(state){
             state.userId = null,
             state.isLogin = false;
+        },
+        showModal(state){
+            state.modalStatus = !state.modalStatus;
         }
         
     },
@@ -26,6 +30,7 @@ export default {
         },
         async logout({ commit }){
             commit('deleteState');
+            commit('todo/deleteTodos', null, {root:true});
         },
         async leave({ commit }){
             commit('deleteState');

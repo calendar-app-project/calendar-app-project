@@ -1,7 +1,6 @@
 <template>
-<div>
-  <template v-if="isModal">
-    <ModalView @close-modal="isModal=false">
+  <div>
+    <ModalView v-if="modalStatus">
       <template v-slot:header>
         <p>회원가입 완료!</p>
       </template>
@@ -10,40 +9,39 @@
       </template>
       <template v-slot:footer>
         <button class="modal-default-button btn-secondary btn-sm" @click="goToLoginPage">
-                    로그인 하기
+        로그인 하기
         </button>
       </template>
     </ModalView>
-  </template>
-  <Form v-else @submit="onSubmit" :validation-schema="schema">
-     <div class="container mb-4 w-25">
-        <div class="userIcon">
-          <font-awesome-icon icon="user-circle"  size="5x" color="lightgray"/>
-        </div>
-        <Field name="id" type="id"  v-slot="{ field, errorMessage, meta }">
-          <div class="field">
-            <label for="id" class="form-label">아이디</label>
-            <input class="form-control" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
-            <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
+    <Form v-else @submit="onSubmit" :validation-schema="schema">
+      <div class="container mb-4 w-25">
+          <div class="userIcon">
+            <font-awesome-icon icon="circle-user" size="5x" color="lightgray"/>
           </div>
-        </Field>
-        <Field name="password" type="password"  v-slot="{ field, errorMessage, meta }">
-          <div class="field">
-            <label for="pwd" class="form-label">비밀번호</label>
-            <input class="form-control" type="password" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
-            <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
-          </div>
-        </Field>
-        <Field name="repassword" type="password"  v-slot="{ field, errorMessage, meta }">
-          <div class="field">
-            <label for="repwd" class="form-label">비밀번호 확인</label>
-            <input class="form-control" type="password" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
-            <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
-          </div>
-        </Field>
-        <button type="submit" class="join-btn btn-secondary btn">회원가입</button>
-     </div>
-  </Form>
+          <Field name="id" type="id"  v-slot="{ field, errorMessage, meta }">
+            <div class="field">
+              <label for="id" class="form-label">아이디</label>
+              <input class="form-control" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
+              <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
+            </div>
+          </Field>
+          <Field name="password" type="password"  v-slot="{ field, errorMessage, meta }">
+            <div class="field">
+              <label for="pwd" class="form-label">비밀번호</label>
+              <input class="form-control" type="password" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
+              <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
+            </div>
+          </Field>
+          <Field name="repassword" type="password"  v-slot="{ field, errorMessage, meta }">
+            <div class="field">
+              <label for="repwd" class="form-label">비밀번호 확인</label>
+              <input class="form-control" type="password" v-bind="field" :class="{ 'is-invalid': !meta.valid && errorMessage }"/>
+              <span class="errMsg" v-if="errorMessage && !meta.valid">{{ errorMessage }}</span>
+            </div>
+          </Field>
+          <button type="submit" class="join-btn btn-secondary btn">회원가입</button>
+      </div>
+    </Form>
 </div>
 </template>
 
@@ -51,7 +49,8 @@
 import { Form, Field } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 import { joinUser } from '../api/index';
-import ModalView from '../components/LoginModal.vue';
+import ModalView from '../components/Modal.vue';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   components: {
@@ -68,16 +67,19 @@ export default {
 
     return {
       schema,
-      isModal: false,
     };
 
   },
+  computed: {
+    ...mapState("user", ["modalStatus"]),
+  },
   methods: {
+      ...mapMutations("user", ["showModal"]),
       async onSubmit(userData, actions) {
         try{
           const res = await joinUser(userData);
           if(!res.data.resultData.duplicatedId){
-            this.isModal = true;
+            this.showModal();
           }else{
             actions.setFieldError('id', '이미 사용중인 아이디 입니다.');
           }
@@ -86,8 +88,8 @@ export default {
         }
     },
     goToLoginPage(){
-            return this.$router.push({name: 'Login'});
-    }
+        return this.$router.push({name: 'Login'});
+    },
   }
 }
 </script>

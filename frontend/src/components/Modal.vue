@@ -1,22 +1,28 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask" @click="$emit('close-modal')">
+  <transition class="modal">
+    <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
-              <slot name="header">
-              </slot>
+          <div class="close-btn" @click="closeModal()">
+            <font-awesome-icon icon="xmark" type="button"/>
           </div>
+          <slot name="container">
 
-          <div class="modal-body">
-            <slot name="body">
-            </slot>
-          </div>
+            <div class="modal-header">
+                <slot name="header">
+                </slot>
+            </div>
 
-          <div class="modal-footer">
-              <slot name="footer">
+            <div class="modal-body">
+              <slot name="body">
               </slot>
-         </div>
+            </div>
+
+            <div class="modal-footer">
+                <slot name="footer">
+                </slot>
+            </div>
+          </slot>
       </div>
     </div>
    </div>
@@ -24,6 +30,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 
 export default ({
     data() {
@@ -31,10 +38,18 @@ export default ({
            
         }
     },
+    methods: {
+      ...mapMutations("todo", ["showModal", "deleteClickedDateState"]),
+      closeModal(){
+        this.showModal();
+        this.deleteClickedDateState();
+      },
+    }
 })
 </script>
 
 <style scoped>
+
 .modal-mask{
   position: fixed;
   z-index: 9998;
@@ -63,6 +78,11 @@ export default ({
   display: flex;
   flex-direction: column;
 }
+.modal-container > .close-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 
 .modal-header {
   justify-content: center;
@@ -79,5 +99,8 @@ export default ({
 .modal-footer {
     margin: 0px;
     font-size: 13px;
+}
+.close-btn {
+
 }
 </style>

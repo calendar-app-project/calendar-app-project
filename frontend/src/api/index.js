@@ -20,4 +20,24 @@ function leaveUser(userData) {
     return axios.post('/api/user/leave', userData)
 }
 
-export {  loginUser, joinUser, logoutUser, leaveUser };
+//일정 등록 api
+function addTodo(id, userData) {
+    return axios.post('/api/calendar/'+ id, userData)
+}
+
+//일정 조회 api
+function getTodo(id, year, month) {
+    return axios.get('/api/calendar/' + id +'/' + year + '/' + month)
+}
+
+//일정 수정 api
+function editTodo(postId, userData) {
+    return axios.put('/api/calendar/'+ postId, userData)
+}
+
+//일정 삭제 api
+function deleteTodo(postId) {
+    return axios.delete('/api/calendar/' + postId)
+}
+export {  loginUser, joinUser, logoutUser, leaveUser, 
+    addTodo, getTodo, editTodo, deleteTodo };

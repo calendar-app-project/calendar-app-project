@@ -6,10 +6,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import store from './store/index.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
- import { faUserCircle, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons' 
+ import { faUserCircle, faChevronRight, faChevronLeft, faXmark, faPlus } from '@fortawesome/free-solid-svg-icons' 
  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome' 
- library.add(faUserCircle, faChevronRight, faChevronLeft)
-
+ library.add(faUserCircle, faChevronRight, faChevronLeft, faXmark, faPlus)
 
 createApp(App)
 .use(router)

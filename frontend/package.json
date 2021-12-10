@@ -23,8 +23,9 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/preset-stage-2": "^7.8.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^6.0.0-beta3",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",

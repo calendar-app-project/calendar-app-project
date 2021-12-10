@@ -23,36 +23,25 @@ app.use(session({
 	// cookie : { maxAge : 30000 }, // 30초
 	store: new mysqlstore({
 		host : 'localhost',
-		port : 3307,
+		port : 3306,
 		user : 'root',
 		password : '1111',
 		database : 'project'
 		})
 }));
 
-// 회원 관리 라우팅
-var userRouter = require('./routes/user');
+// 회원 관리 & 메인 화면 달력(로그인 상태) & 일정 관리 라우팅
+var userRouter = require('./routes/user'); // 회원 관리
+var calendarRouter = require('./routes/calendar');
+// var scheduleRouter = require('./routes/schedule');
 app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
+app.use('/api/calendar', calendarRouter);
+// app.use('/api/schedule', scheduleRouter);
 
 // 3000번 port listening
 app.listen(3000, function(){
 	console.log('Connected 3000 port!');
 });
-
-/*app.get('/', function(req, res){
-	if (req.session.is_logined) {
-		res.render('main_view', {user_id:req.session.nickname});
-	} else {
-		res.redirect('/user/login');
-	}
-});
-
-app.post('/api/user/login', (req, res) => {
-    res.json({
-        state: 200,
-        message: 'Hello World'
-    })
-});*/
 
 // conn.end();

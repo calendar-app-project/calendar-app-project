@@ -16,7 +16,7 @@
                 <label class="form-label">비밀번호를 입력하세요.</label>
                 <div class="passwordInput">
                     <form class="passwordInput" @submit.prevent="confirmPwd(password)">
-                        <input name="password" type="password" class="form-control" id="formGroupExampleInput" v-model="password"/>
+                        <input name="password" type="password" class="form-control" id="Input" v-model="password"/>
                         <button type="submit" class="btn btn-secondary confirmPwd">확인</button>
                     </form>
                 </div>
