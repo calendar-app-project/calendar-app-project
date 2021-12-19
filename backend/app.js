@@ -33,11 +33,9 @@ app.use(session({
 // 회원 관리 & 메인 화면 달력(로그인 상태) & 일정 관리 라우팅
 var userRouter = require('./routes/user'); // 회원 관리
 var calendarRouter = require('./routes/calendar');
-// var scheduleRouter = require('./routes/schedule');
 app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
 app.use('/api/calendar', calendarRouter);
-// app.use('/api/schedule', scheduleRouter);
 
 // 3000번 port listening
 app.listen(3000, function(){

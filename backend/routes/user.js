@@ -19,12 +19,6 @@ var db = mysql.createConnection({
 });
 db.connect();
 
-/*
-로그인 - existedId로 할지 isMatch로 할지 고민하다가, 로그인 성공/실패 여부니까 isMatch = true(성공)/false(실패)로 설정
-회원가입 - 아이디 중복 여부 따지는 duplicatedId = true(중복 o, 가입 실패)/false(중복 x, 가입 성공)로 설정
-회원탈퇴 - 탈퇴 성공/실패 여부로 나뉘는 거라서 isLeave = true(성공)/false(실패)로 설정
-*/
-
 // 1. 로그인
 router.post('/login', function(req, res) {
 	var id = req.body.id;

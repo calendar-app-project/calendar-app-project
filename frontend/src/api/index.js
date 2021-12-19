@@ -32,7 +32,7 @@ function getTodo(id, year, month) {
 
 //일정 수정 api
 function editTodo(postId, userData) {
-    return axios.put('/api/calendar/'+ postId, userData)
+    return axios.patch('/api/calendar/'+ postId, userData)
 }
 
 //일정 삭제 api
