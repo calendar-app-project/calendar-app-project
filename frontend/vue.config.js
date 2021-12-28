@@ -10,5 +10,11 @@ module.exports = {
             }
         }
     },
-    outputDir: '../backend/pub'
+    outputDir: '../backend/pub',
+    pages: {
+        index: {
+            entry: 'src/main.js',
+            template: './index.html'
+        }
+    }
 }

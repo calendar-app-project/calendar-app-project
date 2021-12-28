@@ -2,89 +2,105 @@
     <form class="todoDetail">
         <div class="mb-3">
             <label for="title" class="form-label">일정</label>
-            <input v-if="editStatus" type="text" class="form-control" id="title" v-model="userData.title"/>
-            <p v-else type="text" id="title">{{ userData.title }}</p>
+            <input v-if="editStatus" type="text" class="form-control" id="title" v-model="title"/>
+            <p v-else type="text" id="title">{{ title }}</p>
         </div>
         <div class="mb-3">
             <label for="startTime" class="form-label">시작 시간</label>
             <div class="times" v-if="editStatus">
-                <input type="text" class="form-control time" id="startHour" v-model="userData.startHour"/>
-                <input type="text" class="form-control time" id="startMinute" v-model="userData.startMinute"/>
+                <input type="text" class="form-control time" id="startHour" v-model="startHour"/>
+                <input type="text" class="form-control time" id="startMinute" v-model="startMinute"/>
             </div>
             <div class="times" v-else>
-                <p type="text" id="startHour">{{ userData.startHour+':' }}</p>
-                <p type="text" id="startMinute">{{ userData.startMinute }}</p>
+                <p type="text" id="startHour">{{ startHour+':' }}</p>
+                <p type="text" id="startMinute">{{ startMinute }}</p>
             </div>
         </div>
         <div class="mb-3">
             <label for="endTime" class="form-label">종료 시간</label>
             <div class="times" v-if="editStatus">
-                <input type="text" class="form-control time" id="endHour" v-model="userData.endHour"/>
-                <input type="text" class="form-control time" id="endMinute" v-model="userData.endMinute"/>
+                <input type="text" class="form-control time" id="endHour" v-model="endHour"/>
+                <input type="text" class="form-control time" id="endMinute" v-model="endMinute"/>
             </div>
             <div class="times" v-else>
-                <p type="text" id="endHour">{{ userData.endHour+':' }}</p>
-                <p type="text" id="endMinute">{{ userData.endMinute }}</p>
+                <p type="text" id="endHour">{{ endHour+':' }}</p>
+                <p type="text" id="endMinute">{{ endMinute }}</p>
             </div>
         </div>
         <div class="mb-3">
             <label for="memo" class="form-label">메모</label>
-            <textarea v-if="editStatus" type="text" class="form-control" id="memo" rows="3" v-model="userData.memo"/>
-            <p type="text" v-else id="memo">{{ userData.memo }}</p>
+            <textarea v-if="editStatus" type="text" class="form-control" id="memo" rows="3" v-model="memo"/>
+            <p type="text" v-else id="memo">{{ memo }}</p>
         </div>
         <div v-if="editStatus">
-            <button type="submit" class="btn btn-secondary" @click="edit()">등록하기</button>
+            <button type="submit" class="btn btn-secondary" :class="{'disabled':!title}" @click.prevent="edit()">등록하기</button>
         </div>
         <div v-else class="btns">
             <button type="submit" class="btn btn-secondary" @click="goToEdit()">수정하기</button>
-            <button type="submit" class="btn btn-secondary" @click="del()">삭제하기</button>
+            <button type="submit" class="btn btn-secondary" @click.prevent="del()">삭제하기</button>
         </div>
     </form>
 </template>
 
 <script>
-import { editTodo,deleteTodo } from '../api/index';
+import { mapMutations } from 'vuex';
 
 export default ({
     props: ['todoInfo'],
     data() {
         return {
             editStatus:false,
-            userData : {
             title: this.todoInfo.title,
             startHour: this.todoInfo.start_hour,
             startMinute: this.todoInfo.start_minute,
             endHour: this.todoInfo.end_hour,
             endMinute: this.todoInfo.end_minute,
             memo: this.todoInfo.memo
-            },
         }
     },
     methods: {
+        ...mapMutations('todo', ['toggleModal']),
         goToEdit(){
             this.editStatus = !this.editStatus;
         },
+        convertTime(time) {
+            time = Number(time);
+            if(time % 10 === time){
+                return String(time).padStart(2,'0');
+            }
+            if(time){
+                return String(time).padStart(2,'0');
+            }
+            else{
+                return String(time);
+            }
+        },
         async edit(){
             try{
-                console.log('edit된 userData 전송 전:', this.userData);
-                const res = await editTodo(this.todoInfo.post_id, this.userData);
-                console.log(res);
-               /* 백엔드 코드 받은 뒤 주석 해제
-               if(res.data.resultData) {
-                    console.log('일정 수정 완료');
-                } */
+                const userData = {
+                    title: this.title,
+                    startHour: this.convertTime(this.startHour),
+                    startMinute: this.convertTime(this.startMinute),
+                    endHour: this.convertTime(this.endHour),
+                    endMinute: this.convertTime(this.endMinute),
+                    memo: this.memo
+                }
+                const editData = {
+                    post_id: this.todoInfo.post_id,
+                    date: this.todoInfo.date,
+                    ...userData
+                }
+                await this.$store.dispatch('todo/editSchedule', editData);
+                this.toggleModal();
+
             }catch(err) {
                 console.log(err);
             }
         },
         async del(){
             try{
-                const res = await deleteTodo(this.todoInfo.post_id);
-                console.log(res);
-                /* 백엔드 코드 받은 뒤 주석 해제
-                if(res.data.resultData) {
-                    console.log('일정 삭제 완료');
-                }*/
+                await this.$store.dispatch('todo/deleteSchedule', this.todoInfo.post_id);
+                this.toggleModal();
             }catch(err){
                 console.log(err);
             }

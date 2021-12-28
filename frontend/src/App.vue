@@ -1,8 +1,8 @@
 <template>
 <div>
-  <Header />
-  <RouterView />
-  </div>
+  <Header/>
+  <RouterView/>
+</div>
 </template>
 
 <script>
@@ -17,11 +17,10 @@ export default {
 </script>
 
 <style>
+
 #app {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #676a6d;
 }
 </style>

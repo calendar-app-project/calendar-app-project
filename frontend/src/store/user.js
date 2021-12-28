@@ -9,31 +9,32 @@ export default {
     },
     getters: {},
     mutations: {
-        updateState(state, payload){
+        updateUserState(state, payload){
             state.userId = payload.userData;
             state.isLogin = true;
         },
-        deleteState(state){
+        deleteUserState(state){
             state.userId = null,
             state.isLogin = false;
         },
-        showModal(state){
+        showSuccessModal(state){
             state.modalStatus = !state.modalStatus;
         }
         
     },
     actions: {
         async login({ commit }, userData){
-            commit('updateState', {
+            commit('updateUserState', {
                 userData
             })
         },
         async logout({ commit }){
-            commit('deleteState');
-            commit('todo/deleteTodos', null, {root:true});
+            commit('deleteUserState');
+            commit('todo/deleteTodosPerMth', null, {root:true});
         },
         async leave({ commit }){
-            commit('deleteState');
+            commit('deleteUserState');
+            commit('todo/deleteTodosPerMth', null, {root:true});
         }
     },
 }

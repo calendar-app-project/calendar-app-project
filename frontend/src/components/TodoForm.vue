@@ -22,13 +22,12 @@
             <label for="memo" class="form-label">메모</label>
             <textarea class="form-control" id="memo" rows="3" v-model="memo"></textarea>
         </div>
-        <button type="submit" class="btn btn-secondary" @click="add()">등록하기</button>
+        <button type="submit" class="btn btn-secondary" :class="{'disabled': !title}" @click.prevent="add()">등록하기</button>
     </form>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { addTodo } from '../api/index';
+import { mapState, mapMutations } from 'vuex';
 
 export default ({
     data() {
@@ -39,12 +38,15 @@ export default ({
             endHour: null,
             endMinute: null,
             memo:'',
+            
         }
     },
     computed: {
         ...mapState("todo", ["date","clickedDate"]),
+       
     },
     methods: {
+         ...mapMutations('todo', ['toggleModal','updateTodos']),
         convertTime(time) {
             time = Number(time);
             if(time % 10 === time){
@@ -65,15 +67,18 @@ export default ({
                     year: this.date.year,
                     month: this.date.month,
                     clickedDate: this.clickedDate,
-                    start_hour: this.convertTime(this.startHour),
-                    start_minute: this.convertTime(this.startMinute),
-                    end_hour: this.convertTime(this.endHour),
-                    end_minute: this.convertTime(this.endMinute),
+                    startHour: this.convertTime(this.startHour),
+                    startMinute: this.convertTime(this.startMinute),
+                    endHour: this.convertTime(this.endHour),
+                    endMinute: this.convertTime(this.endMinute),
                     memo: this.memo
                 }
+                await this.$store.dispatch('todo/addSchedule',{
+                    id,
+                    userData
+                })
                 console.log('userData:', userData);
-                const res = await addTodo(id, userData);
-                console.log(res);
+                this.toggleModal();
             }catch(err){
                 console.log(err);
             }   

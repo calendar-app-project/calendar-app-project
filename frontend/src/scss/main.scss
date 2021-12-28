@@ -1,5 +1,8 @@
-$primary: #fff899;
-$secondary: #e2e2e2;
+$primary:rgba(160, 160, 160, 0.938);
+$secondary:#dfdfdffd;
+$todo-color: #b3e7e7d2;
+$font-color: #9e9a9a;
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
-
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/badge";
+@import "../../node_modules/bootstrap/scss/tables";

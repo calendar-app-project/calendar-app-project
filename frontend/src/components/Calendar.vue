@@ -1,44 +1,47 @@
 <template>
     <div class="main">
-        <h4>{{ currentYear +'년 '+ `${currentMonth+1}` + '월' }}</h4>
         <ModalView v-if="modalStatus">
             <template v-slot:body>
                 <AddToDoContent/>
             </template>
         </ModalView>
-        <div class="calendar">
-            <div class="moveMth" @click="getDates(-1)">
+        <div class="moveMth" @click="getDates(-1)">
                 <font-awesome-icon type="button" icon="chevron-left" size="lg"/>
             </div>
-            <table class="table table-bordered rounded">
-                <thead class="table-secondary">
+        <div class="calendar">
+            <div class="title">
+            <p id="month">{{ matchCurrentMonth }}</p>
+            <p id="year">{{ currentYear }}</p>
+        </div>
+            <table class="table table-responsive">
+                <thead>
                     <tr>
                         <th scope="col" v-for="day in days" :key="day">{{ day }}</th>
                     </tr>
                 </thead>
-                <tbody class="table-primary">
-                    <tr height="100" v-for="(weeks, FirstIdx) in dates" :key="FirstIdx">
-                        <td width="120" height="120" scope="row" v-for="(date, SecondIdx) in weeks" :key="SecondIdx"
-                            :class="{'today': isToday() && (date === this.date) && (SecondIdx > this.lastMonthLastDay) && (SecondIdx < this.nextMonthFirstDay),
-                                 'prev-or-next-month': (FirstIdx===0 && SecondIdx <= this.lastMonthLastDay) && (this.lastMonthLastDay!==6) ||
-                                                       (FirstIdx === dates.length-1 && SecondIdx >= this.nextMonthFirstDay) && (this.nextMonthFirstDay!==0) }"
+                <tbody>
+                    <tr v-for="(weeks, FirstIdx) in dates" :key="FirstIdx">
+                        <td scope="row" v-for="(date, SecondIdx) in weeks" :key="SecondIdx"
+                            :class="{'today': isToday(date,FirstIdx, SecondIdx),
+                                     'prev-or-next-month': isPrevOrNextMth(dates,FirstIdx,SecondIdx)}"
+                            class="date"
                             @click="showToDoModal(date)">
                             <div>{{ date }}</div>
-                            <div v-for="(todo,idx) in todos" :key="idx">
-                                <span class="badge rounded-pill bg-light text-dark"
-                                      v-if="todo.date === date && 
-                                            !(FirstIdx === 0 && SecondIdx <= this.lastMonthLastDay) && 
-                                            !(FirstIdx === dates.length-1 && SecondIdx >= this.nextMonthFirstDay)">
-                                    {{ todo.title }}
-                                </span>
-                            </div> 
+                            <div v-for="(todo,idx) in getListOfTodo(date)" :key="idx" v-show="idx<=2 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)">
+                                 <span class="badge rounded-pill">
+                                        {{ todo.title }}
+                                 </span>
+                            </div>
+                            <span v-show="getListOfTodo(date).length>3 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)" class="badge more-todo rounded-pill text-white">
+                                     +{{ getListOfTodo(date).length-3 }}
+                            </span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div class="moveMth" @click="getDates(1)">
+        </div>
+        <div class="moveMth" @click="getDates(1)">
                 <font-awesome-icon type="button" icon="chevron-right" size="lg"/>
-            </div>
         </div>
     </div>
 </template>
@@ -66,13 +69,13 @@ export default ({
     data() {
         return {
             days: [
-                '일',
-                '월',
-                '화',
-                '수',
-                '목',
-                '금',
-                '토'
+                'SUN',
+                'MON',
+                'TUE',
+                'WED',
+                'THU',
+                'FRI',
+                'SAT'
             ],
             today:0,
             dates: [],
@@ -91,9 +94,13 @@ export default ({
     },
     computed: {
         ...mapState("todo", ['todos','modalStatus','clickedDate']),
+        matchCurrentMonth(){
+            const Month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return Month[this.currentMonth];
+        }
     },
     methods: {
-        ...mapMutations("todo", ["showModal", "updateDate","updateClickedDate", "deleteTodos"]),
+        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth"]),
         getFirstAndLastDate(month, year){
             const lastMonthLastDate = new Date(year, month, 0).getDate();
             const lastMonthLastDay = new Date(year, month, 0).getDay();
@@ -102,12 +109,25 @@ export default ({
             return [this.lastMonthLastDate=lastMonthLastDate, this.lastMonthLastDay=lastMonthLastDay, 
             this.thisMonthLastDate=thisMonthLastDate, this.nextMonthFirstDay=nextMonthFirstDay];
         },
-        isToday(){
-            if(this.currentMonth === this.month && this.currentYear === this.year){
-                return true;
-            }else{
-                return false;
+        isToday(date, FirstIdx, SecondIdx){
+            if(!this.isPrevOrNextMth(date, FirstIdx, SecondIdx)
+                && date === this.date
+                && this.currentMonth === this.month
+                && this.currentYear === this.year)
+                {
+                    return true;
+                }else{
+                    return false;
             }
+        },
+        isPrevOrNextMth(dates, FirstIdx, SecondIdx){
+            if((FirstIdx===0 && SecondIdx <= this.lastMonthLastDay && (this.lastMonthLastDay!==6))
+                || ((FirstIdx === dates.length-1 && SecondIdx >= this.nextMonthFirstDay) && (this.nextMonthFirstDay!==0))) 
+                {
+                    return true;
+                }else{
+                    return false;
+                }
         },
         checkLength(){
             if(this.week.length === 7){
@@ -167,15 +187,14 @@ export default ({
             this.getNextMonth(nextMonthFirstDay);
             
             if(this.$store.state.user.userId){
-                this.updateDate({
+                this.setDate({
                         year: this.currentYear,
                         month: this.currentMonth + 1
                         });
                 //todo 요청
-                this.deleteTodos();
+                this.deleteTodosPerMth();
                 this.getSchedule();
             }
-            
             return this.dates;
         },
         getSchedule(){
@@ -183,43 +202,117 @@ export default ({
         },
         showToDoModal(date){
             if(this.$store.state.user.userId){
-                this.updateClickedDate(date);
-                this.showModal();
+                this.setClickedDate(date);
+                this.toggleModal();
             }
         },
+        getListOfTodo(date) {
+            let list =[];
+            list = this.todos.filter(todo => todo.date === date)
+            return list;
+            }
     },
 })
 </script>
 
-<style lang="scss" scoped>/*
-@import '../scss/main.scss';*/
+<style lang="scss" scoped>
+@import '../scss/main.scss';
 
 .main {
-    margin: 40px 0;
+    display: flex;
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    align-items: center;
+    justify-content:center;
+    @media (max-width: 550px){
+       width: 550px;
+   }
 }
 .calendar {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    flex-basis: 60%;
 }
-.main > h4 {
-    margin: 30px 0;
+.title{
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    color:$primary;
+    $calendar-title-font-size: 55px;
+    
+    #year {
+        margin-left: 10px;
+        font-size:$calendar-title-font-size;
+        margin-bottom: 0;
+    }
+    #month {
+        font-size:$calendar-title-font-size * 0.7;
+        margin-bottom: 0;
+    }
+    @media (min-width:800px) and (max-width:1200px){
+        #year {
+            font-size: $calendar-title-font-size * 0.85;
+        }
+        #month {
+            font-size: $calendar-title-font-size * 0.65;
+        }
+        
+    }
+    @media (max-width:800px){
+        #year {
+            font-size: $calendar-title-font-size * 0.7;
+        }
+        #month {
+            font-size: $calendar-title-font-size * 0.5;
+        }
+    }
+    
 }
-.table {
-    border: 1px solid lightgray;    
+.date {
+    cursor: pointer;
 }
 .moveMth {
-    color: gray;
+    color: $primary;
+    opacity: .7;
+    font-size: 20px;
     margin: 0 50px;
 }
 .moveMth:active {
     color: lightgrey;
 }
 .prev-or-next-month {
-    color: grey;
     opacity: 0.4;
+    pointer-events: none;
 }
 .today {
-    color:mediumspringgreen;
-    font-weight: 600;
+    color: #ff5e00f1;
+    font-weight: 700;
 }
+thead {
+    background-color: $primary;
+    color:$secondary;
+    th:first-child {
+        border-radius: 20px 0 0 0;
+    }
+    th:last-child {
+        border-radius: 0 20px 0 0;
+    }
+}
+tbody {
+    text-align: start;
+    color: $font-color;
+    td {
+        position: relative;
+        width: 13%;
+        height: 140px;
+    }
+}
+.more-todo {
+    position: absolute;
+    bottom: 3px;
+    font-size: 11px;
+    background-color: $secondary;
+}
+
 </style>

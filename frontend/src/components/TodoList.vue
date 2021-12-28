@@ -4,8 +4,9 @@
       <template class="content">
           <p>{{ clickedDate + '일' }}</p>
           <div class="todoList" v-if="filterTodos">
-            <div class="todo" v-for="(todo,idx) in filterTodos" :key="idx" @click="showDetail(todo)">
-              {{ todo.title }}
+            <div class="todo" v-for="(todo,idx) in filterTodos" :key="idx">
+              <!--<input class="form-check-input" type="checkbox" id="flexCheck">-->
+              <span @click="showDetail(todo)">{{ todo.title }}</span>
             </div>
           </div>
           <div class="btn">
@@ -64,7 +65,7 @@ export default ({
   position: relative;
 }
 .content > p{
-  font-size: 22px;
+  font-size: 25px;
   padding-top: 0;
 }
 .btn {
@@ -73,9 +74,13 @@ export default ({
   left: 260px;
 }
 .todoList > .todo {
-  margin: 6px;
+  margin: 10px;
   font-size: 15px;
   text-align: left;
+  cursor: pointer;
+}
+.form-check-input {
+  margin-right: 7px;
 }
 
 </style>

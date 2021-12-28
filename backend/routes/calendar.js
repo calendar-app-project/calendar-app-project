@@ -24,14 +24,14 @@ router.post('/:id', function(req, res) {
 	var year = req.body.year;
 	var month = req.body.month;
 	var date = req.body.clickedDate;
-	var start_hour = req.body.start_hour;
-	var start_minute = req.body.start_minute;
-	var end_hour = req.body.end_hour;
-	var end_minute = req.body.end_minute;
+	var start_hour = req.body.startHour;
+	var start_minute = req.body.startMinute;
+	var end_hour = req.body.endHour;
+	var end_minute = req.body.endMinute;
 	var memo = req.body.memo;
 
 	/* 시간 관련 값들은 입력 x시 00으로 자동으로 들어가는 게 나을 것 같아서 메모만 구분함*/
-	// 1. 메모에 입력 값이 없을 때(default값인 no memo로 등록됨)
+	// 1. 메모에 입력 값이 없을 때(default값인 no memo로 등록)
 	if (memo == '') { // TodoForm.vue
 		var resultData = {}; // 등록 성공 여부
 		var sql = 'insert into Schedule(year, month, date, title, start_hour, start_minute, end_hour, end_minute, id) values(?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -41,24 +41,65 @@ router.post('/:id', function(req, res) {
 				res.status(500);
 			} else {
 				resultData.addSchedule = true; // 일정 등록 성공
-				res.status(200).json({
-					resultData,
-					message : "add todo success"});
-			}
+				
+				// 자동등록 post_id와 'no memo' 만 받아오기(나머지는 프론트에서 처음 받은 값과 일치해서 그대로 다시 돌려줘도 됨)
+				var sql2 = 'select post_id, memo from Schedule where id=? and title=?';
+				db.query(sql2, [id, title], function(err, rows2, fields) {
+					if(err) {
+						console.log(err);
+						res.status(500);
+					} else {
+						addData = {}; // 보내줄 데이터
+						addData.post_id = rows2[0].post_id;
+						addData.month = month;
+						addData.date = date;
+						addData.title = title;
+						addData.start_hour = start_hour;
+						addData.start_minute = start_minute;
+						addData.end_hour = end_hour;
+						addData.end_minute = end_minute;
+						addData.memo = rows2[0].memo;
+						res.status(200).json({
+							addData,
+							resultData,
+							medssage : "add todo success"});
+					}
+				}); // sql문
+			} // if-else문
 		}); // sql문
 	} else { // 2. 메모에 입력 값이 있을 때
 		var resultData = {};
-		var sql2 = 'insert into Schedule(year, month, date, title, start_hour, start_minute, end_hour, end_minute, memo, id) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		db.query(sql2, [year, month, date, title, start_hour, start_minute, end_hour, end_minute, memo, id], function(err, rows, fields) {
+		var sql3 = 'insert into Schedule(year, month, date, title, start_hour, start_minute, end_hour, end_minute, memo, id) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		db.query(sql3, [year, month, date, title, start_hour, start_minute, end_hour, end_minute, memo, id], function(err, rows, fields) {
 			if(err) {
 				console.log(err);
 				res.status(500);
 			} else {
-				resultData.addSchedule = true;
-				res.status(200).json({
-					resultData,
-					message : "add todo success"});
-			}
+				resultData.addSchedule = true; // 일정 등록 성공
+
+				var sql4 = 'select post_id from Schedule where id=? and title=?'; // 자동등록 post_id만 받아오기
+				db.query(sql4, [id, title], function(err, rows2, fields) {
+					if(err) {
+						console.log(err);
+						res.status(500);
+					} else {
+						addData = {}; // 보내줄 데이터
+						addData.post_id = rows2[0].post_id;
+						addData.month = month;
+						addData.date = date;
+						addData.title = title;
+						addData.start_hour = start_hour;
+						addData.start_minute = start_minute;
+						addData.end_hour = end_hour;
+						addData.end_minute = end_minute;
+						addData.memo = memo;
+						res.status(200).json({
+							addData,
+							resultData,
+							message : "add todo success"});
+					}
+				}); // sql문
+			} // if-else문
 		}); // sql문
 	} // if-else문
 });
@@ -99,7 +140,7 @@ router.get('/:id/:year/:month', function(req, res) {
 });
 
 // 3. 일정 편집
-router.patch('/:post_id', function(req, res) {
+router.put('/:post_id', function(req, res) {
 	var post_id = req.params.post_id;
 	var title = req.body.title;
 	var start_hour = req.body.startHour;

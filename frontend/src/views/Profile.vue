@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="userIcon">
-            <font-awesome-icon icon="user-circle"  size="5x" color="lightgray"/>
+            <font-awesome-icon icon="circle-user"  size="5x" color="lightgray"/>
         </div>
         <div class="profile">
             <h3>안녕하세요,</h3>
@@ -69,7 +69,10 @@ export default ({
 
 <style scoped>
 .container {
-    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
 }
 .userIcon {
     margin: 30px 0;

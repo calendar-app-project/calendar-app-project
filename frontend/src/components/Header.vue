@@ -11,7 +11,7 @@
                 Logout
             </div>
             <RouterLink class="nav id" to="/profile">
-                {{ $store.state.user.userId + '님' }}💚
+                {{ $store.state.user.userId + '님' }}
             </RouterLink>
         </div>
     </header>
@@ -52,6 +52,9 @@ export default ({
 
 <style scoped>
  header {
+     position: fixed;
+     right: 0;
+     top: 0;
      display: flex;
      justify-content: flex-end;
      margin-right: 10px;

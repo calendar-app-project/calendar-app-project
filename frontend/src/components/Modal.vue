@@ -39,10 +39,10 @@ export default ({
         }
     },
     methods: {
-      ...mapMutations("todo", ["showModal", "deleteClickedDateState"]),
+      ...mapMutations("todo", ["toggleModal", "deleteClickedDate"]),
       closeModal(){
-        this.showModal();
-        this.deleteClickedDateState();
+        this.toggleModal();
+        this.deleteClickedDate();
       },
     }
 })

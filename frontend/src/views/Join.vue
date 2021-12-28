@@ -74,12 +74,12 @@ export default {
     ...mapState("user", ["modalStatus"]),
   },
   methods: {
-      ...mapMutations("user", ["showModal"]),
+      ...mapMutations("user", ["showSuccessModal"]),
       async onSubmit(userData, actions) {
         try{
           const res = await joinUser(userData);
           if(!res.data.resultData.duplicatedId){
-            this.showModal();
+            this.showSuccessModal();
           }else{
             actions.setFieldError('id', '이미 사용중인 아이디 입니다.');
           }
@@ -96,8 +96,10 @@ export default {
 
 <style scoped>
 .container {
-  padding-top: 40px;
-  align-items: center;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
 }
 .userIcon {
     margin: 50px 0;

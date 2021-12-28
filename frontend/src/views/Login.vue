@@ -69,8 +69,10 @@ export default {
 
 <style scoped>
 .container {
-  padding-top: 40px;
-  align-items: center;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
 }
 .userIcon {
     margin: 50px 0;
