@@ -23,6 +23,7 @@
                 <div class="pwdInfo" :class="{ 'active': notMatch }">비밀번호가 일치하지 않습니다.</div>
             </div>
         </transition>
+        
     </div>
 </template>
 

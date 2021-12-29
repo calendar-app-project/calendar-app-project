@@ -28,7 +28,7 @@
                             @click="showToDoModal(date)">
                             <div>{{ date }}</div>
                             <div v-for="(todo,idx) in getListOfTodo(date)" :key="idx" v-show="idx<=2 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)">
-                                 <span class="badge rounded-pill">
+                                 <span class="badge rounded-pill" :class="{ 'bg-success blinking': searchedData.postId===todo.post_id }">
                                         {{ todo.title }}
                                  </span>
                             </div>
@@ -93,14 +93,14 @@ export default ({
         }
     },
     computed: {
-        ...mapState("todo", ['todos','modalStatus','clickedDate']),
+        ...mapState("todo", ['todos','modalStatus','clickedDate','searchedData']),
         matchCurrentMonth(){
             const Month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return Month[this.currentMonth];
         }
     },
     methods: {
-        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth"]),
+        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth","setSearchedData"]),
         getFirstAndLastDate(month, year){
             const lastMonthLastDate = new Date(year, month, 0).getDate();
             const lastMonthLastDay = new Date(year, month, 0).getDay();
@@ -160,7 +160,12 @@ export default ({
         getDates(param=0){
 
             this.dates =[];
-        
+
+            if(this.searchedData.year!==0){
+                this.currentYear = this.searchedData.year;
+                this.currentMonth = this.searchedData.month;
+                //searchedData 초기화 코드 작성 필요
+            }
             if(param === 1){
                 this.currentMonth++;
                 if(this.currentMonth === 12){
@@ -208,7 +213,8 @@ export default ({
         },
         getListOfTodo(date) {
             let list =[];
-            list = this.todos.filter(todo => todo.date === date)
+            list = this.todos.filter(todo => todo.date === date);
+            //const r = this.todos.filter(todo => todo.post_id===12);
             return list;
             }
     },
@@ -221,7 +227,7 @@ export default ({
 .main {
     display: flex;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 70px;
     text-align: center;
     align-items: center;
     justify-content:center;
@@ -291,7 +297,7 @@ export default ({
 }
 thead {
     background-color: $primary;
-    color:$secondary;
+    color:$table-head-font-color;
     th:first-child {
         border-radius: 20px 0 0 0;
     }
@@ -314,5 +320,22 @@ tbody {
     font-size: 11px;
     background-color: $secondary;
 }
-
+//수정 예정
+ .blinking{
+            -webkit-animation:blink .5s ease-in-out infinite alternate;
+            -moz-animation:blink .5s ease-in-out infinite alternate;
+            animation:blink .5s ease-in-out infinite alternate;
+        }
+        @-webkit-keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+        @-moz-keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+        @keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
 </style>
