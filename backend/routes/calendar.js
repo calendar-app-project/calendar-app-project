@@ -139,7 +139,7 @@ router.get('/:id/:year/:month', function(req, res) {
 	}); // sql문
 });
 
-// 3. 일정 편집
+// 3. 일정 수정
 router.put('/:post_id', function(req, res) {
 	var post_id = req.params.post_id;
 	var title = req.body.title;
@@ -149,14 +149,14 @@ router.put('/:post_id', function(req, res) {
 	var end_minute = req.body.endMinute;
 	var memo = req.body.memo;
 
-	var resultData = {}; // 편집 성공 여부
+	var resultData = {}; // 수정 성공 여부
 	var sql = 'update Schedule SET title=?, start_hour=?, start_minute=?, end_hour=?, end_minute=?, memo=? where post_id=?';
 	db.query(sql, [title, start_hour, start_minute, end_hour, end_minute, memo, post_id], function(err, rows, fields) {
 		if(err) {
 			console.log(err);
 			res.status(500);
 		} else {
-			resultData.editTodo = true; // 일정 편집 성공
+			resultData.editTodo = true; // 일정 수정 성공
 			res.status(200).json({
 				resultData,
 				message : "edit todo data success"});
@@ -183,31 +183,33 @@ router.delete('/:post_id', function(req, res) {
 	}); // sql문
 });
 
-/* 달력 조회
-router.get('/:month', function(req, res) {
-	console.log(req.params.month);
-	res.json({message : "success"});
+// 5. 일정 검색
+router.get('/:id', function(req, res) {
+	var id = req.params.id;
+	var title = req.body.title;
 
-	var id = req.session.nickname;
-	var month = req.params.month;
-
-	// 채울 부분
-	var resultData = {};
-	var sql = 'select * from Schedule where id=? and month=?';
-	db.query(sql, [id, month], function(err, rows, fields) {
+	var resultData = {}; // 검색 성공 여부
+	var sql = 'select post_id, year, month, date, title from Schedule where id=? and title=?';
+	db.query(sql, [id, title], function(err, rows, fields) {
 		if(err) {
 			console.log(err);
 			res.status(500);
 		} else {
-			var result = rows[0]; // 받아온 전체 데이터(백엔드에서 분류? / 변수 수정)
-			var resultData.showCalendar = true; // 달력 조회 성공 여부
+			resultData.searchTodo = true; // 일정 검색 성공
+
+			searchData = {}; // 보내줄 데이터
+			searchData.post_id = rows[0].post_id;
+			searchData.year = rows[0].year;
+			searchData.month = rows[0].month;
+			searchData.date = rows[0].date;
+			searchData.title = rows[0].title;
+
 			res.status(200).json({
-				result; // result : result인지 확인 필요
+				searchData,
 				resultData,
-				message : "show calendar data success"}); // 달력 조회 성공
-		}
-	});
+				message : "search todo data success"});
+		} // if-else문
+	}); // sql문
 });
-*/
 
 module.exports = router;

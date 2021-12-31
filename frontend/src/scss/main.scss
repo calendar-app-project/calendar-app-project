@@ -4,6 +4,8 @@ $table-head-font-color:#fcfafa;
 $todo-color: #d1d0d0bd;
 $font-color: #9e9a9a;
 
+@import "../../node_modules/bootstrap/scss/functions";
 @import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
 @import "../../node_modules/bootstrap/scss/badge";
 @import "../../node_modules/bootstrap/scss/tables";
