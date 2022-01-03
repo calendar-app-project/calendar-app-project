@@ -22,13 +22,13 @@
                 <tbody>
                     <tr v-for="(weeks, FirstIdx) in dates" :key="FirstIdx">
                         <td scope="row" v-for="(date, SecondIdx) in weeks" :key="SecondIdx"
-                            :class="{'today': isToday(date,FirstIdx, SecondIdx),
-                                     'prev-or-next-month': isPrevOrNextMth(dates,FirstIdx,SecondIdx)}"
+                            :class="{'today': isToday(date, dates, FirstIdx, SecondIdx),
+                                     'prev-or-next-month': isPrevOrNextMth(dates, FirstIdx, SecondIdx)}"
                             class="date"
                             @click="showToDoModal(date)">
                             <div>{{ date }}</div>
                             <div v-for="(todo,idx) in getListOfTodo(date)" :key="idx" v-show="idx<=2 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)">
-                                 <span class="badge rounded-pill" :class="{ 'bg-success blinking': searchedData.postId===todo.post_id }">
+                                 <span class="badge rounded-pill" :class="{ 'blinking': searchData.postId===todo.post_id }">
                                         {{ todo.title }}
                                  </span>
                             </div>
@@ -93,14 +93,14 @@ export default ({
         }
     },
     computed: {
-        ...mapState("todo", ['todos','modalStatus','clickedDate','searchedData']),
+        ...mapState("todo", ['todos','modalStatus','clickedDate','searchData']),
         matchCurrentMonth(){
             const Month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return Month[this.currentMonth];
         }
     },
     methods: {
-        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth","setSearchedData"]),
+        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth",'resetSearchData']),
         getFirstAndLastDate(month, year){
             const lastMonthLastDate = new Date(year, month, 0).getDate();
             const lastMonthLastDay = new Date(year, month, 0).getDay();
@@ -109,8 +109,8 @@ export default ({
             return [this.lastMonthLastDate=lastMonthLastDate, this.lastMonthLastDay=lastMonthLastDay, 
             this.thisMonthLastDate=thisMonthLastDate, this.nextMonthFirstDay=nextMonthFirstDay];
         },
-        isToday(date, FirstIdx, SecondIdx){
-            if(!this.isPrevOrNextMth(date, FirstIdx, SecondIdx)
+        isToday(date, dates, FirstIdx, SecondIdx){
+            if(!(this.isPrevOrNextMth(dates, FirstIdx, SecondIdx))
                 && date === this.date
                 && this.currentMonth === this.month
                 && this.currentYear === this.year)
@@ -161,10 +161,9 @@ export default ({
 
             this.dates =[];
 
-            if(this.searchedData.year!==0){
-                this.currentYear = this.searchedData.year;
-                this.currentMonth = this.searchedData.month;
-                //searchedData 초기화 코드 작성 필요
+            if(this.searchData.postId!==0){
+                this.currentYear = this.searchData.year;
+                this.currentMonth = this.searchData.month-1;
             }
             if(param === 1){
                 this.currentMonth++;
@@ -195,10 +194,15 @@ export default ({
                 this.setDate({
                         year: this.currentYear,
                         month: this.currentMonth + 1
-                        });
+                });
                 //todo 요청
                 this.deleteTodosPerMth();
                 this.getSchedule();
+                
+                if(this.searchData.postId!==0){
+                    setTimeout(() =>
+                        this.resetSearchData(), 3000);
+                }
             }
             return this.dates;
         },
@@ -214,9 +218,8 @@ export default ({
         getListOfTodo(date) {
             let list =[];
             list = this.todos.filter(todo => todo.date === date);
-            //const r = this.todos.filter(todo => todo.post_id===12);
             return list;
-            }
+        }
     },
 })
 </script>
@@ -322,20 +325,13 @@ tbody {
 }
 //수정 예정
  .blinking{
-            -webkit-animation:blink .5s ease-in-out infinite alternate;
-            -moz-animation:blink .5s ease-in-out infinite alternate;
-            animation:blink .5s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
-        @-moz-keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
-        @keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
+    animation:blink .5s ease-in-out 2 alternate;
+    background-color: rgba(68, 165, 101, 0.726);
+ }
+    @keyframes blink{
+         0% {opacity:0;}
+         100% {opacity:1;}
+    }
+
+    
 </style>

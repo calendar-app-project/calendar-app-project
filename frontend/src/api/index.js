@@ -42,7 +42,7 @@ function deleteTodo(postId) {
 
 //일정 검색 api
 function searchTodo(id, title){
-    return axios.get('/api/calendar'+id, title)
+    return axios.get('/api/calendar/' + id + '/' + title)
 }
 export {  loginUser, joinUser, logoutUser, leaveUser, 
     addTodo, getTodo, editTodo, deleteTodo, searchTodo };

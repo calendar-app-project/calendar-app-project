@@ -17,7 +17,7 @@
                 </ul>
                 <form class="search d-flex">
                     <input class="searchInput form-control me-2" v-model="searchTitle" type="search" placeholder="Search">
-                    <button class="searchBtn btn btn-sm btn-outline-success" type="submit" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" @click.prevent="search">Search</button>
+                    <button class="searchBtn btn btn-sm btn-outline-success" type="submit" @click.prevent="search">Search</button>
                 </form>
                 </div>
                 <div v-else class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -36,14 +36,14 @@
                 </div>
             </div>
         </nav>
-        <SearchItem style="width:15%; float: right; max-height: 560px" class="collapse overflow-auto" id="collapseExample"/>
+        <SearchItem :result="result" style="width:15%; float: right; max-height: 560px"/>
     </header>
 </template>
 
 <script>
-import { logoutUser } from '../api/index';
+import { logoutUser,searchTodo } from '../api/index';
 import SearchItem from './SearchItem.vue';
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default ({
     components:{
@@ -53,10 +53,11 @@ export default ({
         return {
             searchTitle:'',
             searchSuccess: false,
+            result:[]
         }
     },
     computed: {
-        ...mapState('todo',['todos', 'searchResult']),
+        ...mapState('todo',['todos']),
         isLogin() {
             return this.$store.state.user.isLogin
         },
@@ -65,7 +66,6 @@ export default ({
         },
     },
     methods: {
-        ...mapMutations('todo', ['setSearchedData']),
         async logout(){
             try {
                 await logoutUser();
@@ -76,16 +76,19 @@ export default ({
             }
         },
         async search(){
-            //await this.$store.dispatch('todo/searchSchedule');
-            //if(this.searchResult){
-                this.searchSuccess=!this.searchSuccess;
-           // }else {
-            //    console.log('결과 없음');
-            //    return false;
-          //  }
-          console.log(this.searchSuccess)
+            const id = this.$store.state.user.userId;
+            if(this.searchTitle){
+                const res = await searchTodo(id, this.searchTitle);
+                if(res.data.resultData.searchTodo){
+                    this.result = res.data.array;
+                }
+                else{
+                    window.alert('검색 결과가 없습니다.');
+                }
+            }
         }
     }
+        
 })
 </script>
 

@@ -1,4 +1,4 @@
-import { getTodo, deleteTodo, editTodo, addTodo, searchTodo } from "../api";
+import { getTodo, deleteTodo, editTodo, addTodo } from "../api";
 
 export default {
     namespaced: true,
@@ -8,8 +8,7 @@ export default {
             date:{},
             clickedDate:0,
             todos:[],
-            searchResult:[],
-            searchedData:{
+            searchData:{
                 postId:0,
                 year:0,
                 month:0
@@ -53,13 +52,15 @@ export default {
         addTodo(state, userData){
             state.todos.push(userData);
         },
-        setSearchResult(state,payload){
-            payload.forEach(todo => state.searchResult.push(todo));
+        setSearchData(state, payload) {
+            state.searchData.postId = payload.post_id;
+            state.searchData.year = payload.year;
+            state.searchData.month = payload.month;
         },
-        setSearchedData(state, {searchedPostId, searchedYear, searchedMonth}) {
-            state.searchedData.postId = searchedPostId;
-            state.searchedData.year = searchedYear;
-            state.searchedData.month = searchedMonth;
+        resetSearchData(state) {
+            state.searchData.postId = 0;
+            state.searchData.year = 0;
+            state.searchData.month = 0;
         }
     },
     actions: {
@@ -67,7 +68,8 @@ export default {
             try{
                 const id = rootState.user.userId;
                 const res = await getTodo(id, state.date.year, state.date.month);
-                if(res.data.array){
+                if(res.data.resultData.showSchedule){
+                    ('get결과:', res.data.array)
                     await commit('setTodos', res.data.array);
                 }
             }catch(err){
@@ -77,7 +79,7 @@ export default {
         async deleteSchedule({commit}, postId){
             try{
                 const res = await deleteTodo(postId);
-                if(res.data.resultData){
+                if(res.data.resultData.deleteTodo){
                     await commit('removeTodo',postId);
                 }
             }catch(err){
@@ -88,7 +90,7 @@ export default {
             try {
                 //const { postId, editData } = payload;
                 const res = await editTodo(payload.post_id, payload);
-                if(res.data.resultData){
+                if(res.data.resultData.editTodo){
                     await commit('updateTodo', {
                         postId: payload.post_id,
                         editData: payload
@@ -109,13 +111,12 @@ export default {
                 console.log(err);
             }
         },
-        async searchSchedule({commit, rootState}, payload){
-            try{
-                const id = rootState.user.userId;
-                const res = await searchTodo(id, payload);
-                if(res.data.searchResult){
-                    await commit ('setSearchResult', res.data.searchResult);
-                }
+        setSearchSchedule({commit}, payload){
+            try {
+                commit('setSearchData', payload);
+                setTimeout(() => {
+                    commit('resetSearchData');
+                }, 3000);
             }catch(err){
                 console.log(err);
             }

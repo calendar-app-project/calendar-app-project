@@ -184,31 +184,37 @@ router.delete('/:post_id', function(req, res) {
 });
 
 // 5. 일정 검색
-router.get('/:id', function(req, res) {
+router.get('/:id/:title', function(req, res) {
 	var id = req.params.id;
-	var title = req.body.title;
+	var title = req.params.title;
+	var search_title = "%"+title+"%"; // 최종적으로 검색할 변수
 
 	var resultData = {}; // 검색 성공 여부
-	var sql = 'select post_id, year, month, date, title from Schedule where id=? and title=?';
-	db.query(sql, [id, title], function(err, rows, fields) {
+	var array = [];
+
+	var sql = 'select post_id, year, month, date, title from Schedule where id=? and title like ?';
+	db.query(sql, [id, search_title], function(err, rows, fields) {
 		if(err) {
 			console.log(err);
 			res.status(500);
 		} else {
-			resultData.searchTodo = true; // 일정 검색 성공
-
-			searchData = {}; // 보내줄 데이터
-			searchData.post_id = rows[0].post_id;
-			searchData.year = rows[0].year;
-			searchData.month = rows[0].month;
-			searchData.date = rows[0].date;
-			searchData.title = rows[0].title;
-
-			res.status(200).json({
-				searchData,
-				resultData,
-				message : "search todo data success"});
-		} // if-else문
+			if(rows[0]!=undefined) {
+				for(var i=0; i<rows.length; i++) {
+					array[i] = rows[i];
+				}
+				resultData.searchTodo = true; // 일정 검색 성공
+				res.status(200).json({
+					resultData,
+					array,
+					message : "search todo data success"});
+			} else {
+				// 검색 결과가 없을 시
+				resultData.searchTodo = false
+				res.status(200).json({
+					resultData,
+					message : "no search data found"});
+			}
+		}
 	}); // sql문
 });
 
