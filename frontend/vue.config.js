@@ -1,4 +1,7 @@
+let path = require("path");
+
 module.exports = {
+    outputDir: path.resolve('../backend/pub'),
     devServer: {
         proxy: {
             '/api': {
@@ -8,13 +11,6 @@ module.exports = {
                     '^/api': ''
                 }
             }
-        }
-    },
-    outputDir: '../backend/pub',
-    pages: {
-        index: {
-            entry: 'src/main.js',
-            template: './index.html'
         }
     }
 }
