@@ -10,9 +10,10 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 // express -> bodyParser
-
+const history = require('connect-history-api-fallback');
 // var cookieParser = require('cookie-parser');
 // app.use(cookieParser());
+
 
 // session 사용
 app.use(session({
@@ -36,6 +37,7 @@ var calendarRouter = require('./routes/calendar');
 app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
 app.use('/api/calendar', calendarRouter);
+app.use(history());
 
 // 3000번 port listening
 app.listen(3000, function(){
