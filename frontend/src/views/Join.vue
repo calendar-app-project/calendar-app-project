@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ModalView v-if="modalStatus">
+    <ModalView v-if="modalStatus" @close-modal="modalStatus=false">
       <template v-slot:header>
         <p>회원가입 완료!</p>
       </template>
@@ -50,7 +50,7 @@ import { Form, Field } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 import { joinUser } from '../api/index';
 import ModalView from '../components/Modal.vue';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -66,12 +66,9 @@ export default {
     });
 
     return {
+       modalStatus:false,
       schema,
     };
-
-  },
-  computed: {
-    ...mapState("user", ["modalStatus"]),
   },
   methods: {
       ...mapMutations("user", ["showSuccessModal"]),
@@ -79,7 +76,7 @@ export default {
         try{
           const res = await joinUser(userData);
           if(!res.data.resultData.duplicatedId){
-            this.showSuccessModal();
+            this.modalStatus = true;
           }else{
             actions.setFieldError('id', '이미 사용중인 아이디 입니다.');
           }
@@ -109,6 +106,7 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 25px;
+    min-width: 180px;
 }
 .form-label {
     font-weight: 600;
@@ -119,11 +117,13 @@ export default {
     font-size: 12px;
     color:rgb(209, 29, 29);
     margin-top: 5px;
+    max-width: 190px;
 }
 
 .join-btn {
     font-size: 13px;
     margin-top: 50px;
+    min-width: 80px;
 }
 
 .modal-default-button {

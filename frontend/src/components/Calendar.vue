@@ -1,18 +1,18 @@
 <template>
     <div class="main">
-        <ModalView v-if="modalStatus">
+        <ModalView v-if="modalStatus" @close-modal="modalStatus=false">
             <template v-slot:body>
                 <AddToDoContent/>
             </template>
         </ModalView>
         <div class="moveMth" @click="getDates(-1)">
-                <font-awesome-icon type="button" icon="chevron-left" size="lg"/>
-            </div>
+            <font-awesome-icon type="button" icon="chevron-left" size="lg"/>
+        </div>
         <div class="calendar">
             <div class="title">
             <p id="month">{{ matchCurrentMonth }}</p>
             <p id="year">{{ currentYear }}</p>
-        </div>
+            </div>
             <table class="table table-responsive">
                 <thead>
                     <tr>
@@ -29,7 +29,7 @@
                             <div>{{ date }}</div>
                             <div v-for="(todo,idx) in getListOfTodo(date)" :key="idx" v-show="idx<=2 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)">
                                  <span class="badge rounded-pill" :class="{ 'blinking': searchData.postId===todo.post_id }">
-                                        {{ todo.title }}
+                                        <div class="badge-text">{{ todo.title }}</div>
                                  </span>
                             </div>
                             <span v-show="getListOfTodo(date).length>3 && !isPrevOrNextMth(dates,FirstIdx,SecondIdx)" class="badge more-todo rounded-pill text-white">
@@ -41,7 +41,7 @@
             </table>
         </div>
         <div class="moveMth" @click="getDates(1)">
-                <font-awesome-icon type="button" icon="chevron-right" size="lg"/>
+            <font-awesome-icon type="button" icon="chevron-right" size="lg"/>
         </div>
     </div>
 </template>
@@ -55,8 +55,7 @@ export default ({
     components: {
         ModalView,
         AddToDoContent
-    },
-    
+    }, 
     created() {
             this.today = new Date();
             this.year = this.today.getFullYear();
@@ -90,6 +89,14 @@ export default ({
             lastMonthLastDay:0,
             thisMonthLastDate:0,
             nextMonthFirstDay:0,
+            modalStatus:false
+        }
+    },
+    watch: {
+        clickedDate(){
+            if(this.modalStatus===false){
+                this.deleteClickedDate();
+            }
         }
     },
     computed: {
@@ -100,7 +107,7 @@ export default ({
         }
     },
     methods: {
-        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth",'resetSearchData']),
+        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth",'resetSearchData','deleteClickedDate']),
         getFirstAndLastDate(month, year){
             const lastMonthLastDate = new Date(year, month, 0).getDate();
             const lastMonthLastDay = new Date(year, month, 0).getDay();
@@ -235,7 +242,7 @@ export default ({
     align-items: center;
     justify-content:center;
     @media (max-width: 550px){
-       width: 550px;
+       width: 500px;
    }
 }
 .calendar {
@@ -294,6 +301,10 @@ export default ({
     opacity: 0.4;
     pointer-events: none;
 }
+.badge-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .today {
     color: #ff5e00f1;
     font-weight: 700;
@@ -313,7 +324,8 @@ tbody {
     color: $font-color;
     td {
         position: relative;
-        width: 13%;
+        min-width: 9vw;
+        max-width: 11vw;
         height: 140px;
     }
 }
@@ -323,7 +335,6 @@ tbody {
     font-size: 11px;
     background-color: $secondary;
 }
-//수정 예정
  .blinking{
     animation:blink .5s ease-in-out 2 alternate;
     background-color: rgba(68, 165, 101, 0.726);

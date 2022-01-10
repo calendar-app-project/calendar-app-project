@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="userIcon">
-            <font-awesome-icon icon="circle-user"  size="5x" color="lightgray"/>
+            <font-awesome-icon icon="circle-user" size="5x" color="lightgray"/>
         </div>
         <div class="profile">
             <h3>안녕하세요,</h3>
@@ -12,18 +12,17 @@
             <button class="btn btn-outline-secondary" @click="leave"> 회원탈퇴</button>
         </div>
         <transition name = "show">
-            <div class="mb-3 confirmInfo" :class="{ 'animation': isLeave}">
+            <div class="confirmInfo" :class="{ 'animation': isLeave}">
                 <label class="form-label">비밀번호를 입력하세요.</label>
-                <div class="passwordInput">
-                    <form class="passwordInput" @submit.prevent="confirmPwd(password)">
-                        <input name="password" type="password" class="form-control" id="Input" v-model="password"/>
-                        <button type="submit" class="btn btn-secondary confirmPwd">확인</button>
-                    </form>
-                </div>
-                <div class="pwdInfo" :class="{ 'active': notMatch }">비밀번호가 일치하지 않습니다.</div>
+                <form @submit.prevent="confirmPwd(password)" class="form">
+                    <div class="form-group">
+                        <input type="password" class="pwdInputField form-control" :class="{'is-invalid': notMatch }" v-model="password"/>
+                        <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary confirmPwd">확인</button>
+                </form>
             </div>
         </transition>
-        
     </div>
 </template>
 
@@ -91,33 +90,24 @@ export default ({
 }
 .confirmInfo {
     margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     opacity: 0;
-    
 }
 .confirmInfo > .form-label {
     font-size: 14px;
+    margin: 5px;
 }
 .animation{
     opacity: 1;
     transition: .8s;
 }
-.passwordInput {
-    display: flex;
+.form {
+   display: flex;
+   align-items: baseline;
 }
-.passwordInput > .form-control {
-    flex-basis: 68%;
-    margin: 10px;
+.confirmPwd {
+    min-width: 55px;
 }
-.pwdInfo{
-    opacity: 0;
-}
-.active {
-    opacity: 1;
+.invalid-feedback {
     font-size: 12px;
-    color:rgb(209, 29, 29);
 }
-
 </style>

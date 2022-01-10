@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="close-btn" @click="closeModal()">
+          <div class="close-btn" @click="$emit('close-modal')">
             <font-awesome-icon icon="xmark" type="button"/>
           </div>
           <slot name="container">
@@ -33,13 +33,8 @@
 import { mapMutations } from 'vuex';
 
 export default ({
-    data() {
-        return {
-           
-        }
-    },
     methods: {
-      ...mapMutations("todo", ["toggleModal", "deleteClickedDate"]),
+      ...mapMutations("todo", ["deleteClickedDate"]),
       closeModal(){
         this.toggleModal();
         this.deleteClickedDate();

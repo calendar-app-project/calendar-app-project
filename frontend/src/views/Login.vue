@@ -82,20 +82,24 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 25px;
+    min-width: 180px;
 }
 .form-label {
     font-weight: 600;
     font-size: 14px;
-    color: darkslategray;  
+    color: darkslategray; 
 }
 .errMsg {
     font-size: 12px;
     color:rgb(209, 29, 29);
     margin-top: 5px;
+    max-width: 190px;
+    
 }
 .btn {
     font-size: 13px;
     margin-top: 50px;
+    min-width: 65px;
 }
 
 </style>
