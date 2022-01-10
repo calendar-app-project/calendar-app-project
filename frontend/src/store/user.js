@@ -4,7 +4,6 @@ export default {
         return {
             userId: null,
             isLogin: false,
-            modalStatus: false,
         }
     },
     getters: {},
@@ -17,10 +16,6 @@ export default {
             state.userId = null,
             state.isLogin = false;
         },
-        showSuccessModal(state){
-            state.modalStatus = !state.modalStatus;
-        }
-        
     },
     actions: {
         async login({ commit }, userData){

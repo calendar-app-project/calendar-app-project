@@ -30,16 +30,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
 
 export default ({
-    methods: {
-      ...mapMutations("todo", ["deleteClickedDate"]),
-      closeModal(){
-        this.toggleModal();
-        this.deleteClickedDate();
-      },
-    }
+ 
 })
 </script>
 
@@ -94,8 +87,5 @@ export default ({
 .modal-footer {
     margin: 0px;
     font-size: 13px;
-}
-.close-btn {
-
 }
 </style>

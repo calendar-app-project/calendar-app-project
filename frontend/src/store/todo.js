@@ -4,7 +4,6 @@ export default {
     namespaced: true,
     state: () => {
         return {
-            modalStatus: false,
             date:{},
             clickedDate:0,
             todos:[],
@@ -21,9 +20,6 @@ export default {
         },
     },
     mutations: {
-        toggleModal(state){
-            state.modalStatus = !state.modalStatus;
-        },
         setDate(state, payload){
             state.date = {
                year: payload.year,
@@ -32,9 +28,6 @@ export default {
         },
         setClickedDate(state, payload) {
             state.clickedDate = payload;
-        },
-        deleteClickedDate(state){
-            state.clickedDate = null;
         },
         deleteTodosPerMth(state){
             state.todos =[];

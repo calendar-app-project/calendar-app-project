@@ -100,14 +100,14 @@ export default ({
         }
     },
     computed: {
-        ...mapState("todo", ['todos','modalStatus','clickedDate','searchData']),
+        ...mapState("todo", ['todos','clickedDate','searchData']),
         matchCurrentMonth(){
             const Month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return Month[this.currentMonth];
         }
     },
     methods: {
-        ...mapMutations("todo", ["toggleModal", "setDate","setClickedDate", "deleteTodosPerMth",'resetSearchData','deleteClickedDate']),
+        ...mapMutations("todo", ["setDate","setClickedDate", "deleteTodosPerMth",'resetSearchData']),
         getFirstAndLastDate(month, year){
             const lastMonthLastDate = new Date(year, month, 0).getDate();
             const lastMonthLastDay = new Date(year, month, 0).getDay();
@@ -218,8 +218,8 @@ export default ({
         },
         showToDoModal(date){
             if(this.$store.state.user.userId){
+                this.modalStatus = true;
                 this.setClickedDate(date);
-                this.toggleModal();
             }
         },
         getListOfTodo(date) {

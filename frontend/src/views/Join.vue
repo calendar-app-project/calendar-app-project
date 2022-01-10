@@ -50,7 +50,6 @@ import { Form, Field } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 import { joinUser } from '../api/index';
 import ModalView from '../components/Modal.vue';
-import { mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -71,7 +70,6 @@ export default {
     };
   },
   methods: {
-      ...mapMutations("user", ["showSuccessModal"]),
       async onSubmit(userData, actions) {
         try{
           const res = await joinUser(userData);
