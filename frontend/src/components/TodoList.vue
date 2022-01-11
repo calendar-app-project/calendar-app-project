@@ -16,8 +16,8 @@
           </div>
       </template>
     </div>
-    <TodoForm v-if="showFormModal"/>
-    <TodoDetail v-if="showDetailModal" :todoInfo="todoInfo"/>
+    <TodoForm v-if="showFormModal" @close-modal="showFormModal=false"/>
+    <TodoDetail v-if="showDetailModal" @close-modal="showDetailModal=false" :todoInfo="todoInfo"/>
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default ({
     showDetail(todo){
         this.showDetailModal = !this.showDetailModal;
         this.todoInfo = todo;
-      }
+      },
     }
 });
 </script>

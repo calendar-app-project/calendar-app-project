@@ -43,8 +43,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-
 export default ({
     props: ['todoInfo'],
     data() {
@@ -59,7 +57,6 @@ export default ({
         }
     },
     methods: {
-        ...mapMutations('todo', ['toggleModal']),
         goToEdit(){
             this.editStatus = !this.editStatus;
         },
@@ -91,8 +88,7 @@ export default ({
                     ...userData
                 }
                 await this.$store.dispatch('todo/editSchedule', editData);
-                this.toggleModal();
-
+                this.$emit('close-modal');
             }catch(err) {
                 console.log(err);
             }
@@ -100,7 +96,7 @@ export default ({
         async del(){
             try{
                 await this.$store.dispatch('todo/deleteSchedule', this.todoInfo.post_id);
-                this.toggleModal();
+                this.$emit('close-modal');
             }catch(err){
                 console.log(err);
             }

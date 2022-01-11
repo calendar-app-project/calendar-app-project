@@ -94,7 +94,6 @@ export default {
     color:rgb(209, 29, 29);
     margin-top: 5px;
     max-width: 190px;
-    
 }
 .btn {
     font-size: 13px;

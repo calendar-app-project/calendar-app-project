@@ -38,15 +38,13 @@ export default ({
             endHour: null,
             endMinute: null,
             memo:'',
-            
         }
     },
     computed: {
         ...mapState("todo", ["date","clickedDate"]),
-       
     },
     methods: {
-         ...mapMutations('todo', ['toggleModal','updateTodos']),
+         ...mapMutations('todo', ['updateTodos']),
         convertTime(time) {
             time = Number(time);
             if(time % 10 === time){
@@ -76,9 +74,8 @@ export default ({
                 await this.$store.dispatch('todo/addSchedule',{
                     id,
                     userData
-                })
-                console.log('userData:', userData);
-                this.toggleModal();
+                });
+                this.$emit('close-modal');
             }catch(err){
                 console.log(err);
             }   

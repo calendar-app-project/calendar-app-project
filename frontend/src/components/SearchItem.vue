@@ -27,7 +27,7 @@ export default ({
     methods: {
         onClick(e){
             if(e.target.parentNode !== this.$refs.card){ //card 외부 영역 클릭
-                this.$emit('close-card', false);
+                this.$emit('close-card');
             }
         },
         find(searchTodo){

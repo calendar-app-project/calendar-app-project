@@ -36,7 +36,8 @@
                 </div>
             </div>
         </nav>
-        <SearchItem v-show="showSearchResult" :result="result" :showSearchResult="showSearchResult" @close-card="toggle" style="width:15%; float: right; max-height: 560px"/>
+        <SearchItem v-show="showSearchResult" style="width:15%; float: right; max-height: 560px"
+        :result="result" :showSearchResult="showSearchResult" @close-card="showSearchResult=false"/>
     </header>
 </template>
 
@@ -89,9 +90,6 @@ export default ({
                     window.alert('검색 결과가 없습니다.');
                 }
             }
-        },
-        toggle(flag){
-            this.showSearchResult = flag;
         },
     }  
 })
