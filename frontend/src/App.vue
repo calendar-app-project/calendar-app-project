@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
 #app {
   font-family: 'Montserrat', sans-serif;

@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" id="bootstrap-override">
         <ModalView v-if="modalStatus" @close-modal="modalStatus=false">
             <template v-slot:body>
                 <AddToDoContent/>
@@ -231,7 +231,7 @@ export default ({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../scss/main.scss';
 
 .main {
@@ -333,7 +333,7 @@ tbody {
     position: absolute;
     bottom: 3px;
     font-size: 11px;
-    background-color: $secondary;
+    background-color: $primary;
 }
  .blinking{
     animation:blink .5s ease-in-out 2 alternate;
