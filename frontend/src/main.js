@@ -2,7 +2,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index.js'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import store from './store/index.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
