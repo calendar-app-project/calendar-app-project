@@ -34,10 +34,12 @@ app.use(session({
 // 회원 관리 & 메인 화면 달력(로그인 상태) & 일정 관리 라우팅
 var userRouter = require('./routes/user'); // 회원 관리
 var calendarRouter = require('./routes/calendar');
-app.use(express.static(path.join(__dirname, 'pub')));
 app.use('/api/user', userRouter);
 app.use('/api/calendar', calendarRouter);
-app.use(history());
+
+app.use(history()); //미들웨어 실행 순서 중요!!!!!!
+
+app.use(express.static(path.join(__dirname, 'pub')));
 
 // 3000번 port listening
 app.listen(3000, function(){
