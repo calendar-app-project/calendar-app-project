@@ -5,12 +5,13 @@ var app = express();
 var mysql = require('mysql');
 const axios = require('axios');
 var bodyParser = require('body-parser');
+var localStorage = require('localStorage');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var db = mysql.createConnection({
 	host : 'localhost',
-	port : 3306,
+	port : 3307,
 	user : 'root',
 	password : '1111',
 	database : 'project'
@@ -19,6 +20,8 @@ db.connect();
 
 // 1. 일정 등록
 router.post('/:id', function(req, res) {
+	//var getValue = localStorage.getItem('test');
+	//console.log(localStorage);
 	var id = req.params.id;
 	var title = req.body.title;
 	var year = req.body.year;
