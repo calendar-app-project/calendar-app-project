@@ -337,7 +337,6 @@ tbody {
 }
  .blinking{
     animation:blink .5s ease-in-out 2 alternate;
-    background-color: rgba(68, 165, 101, 0.726);
  }
     @keyframes blink{
          0% {opacity:0;}

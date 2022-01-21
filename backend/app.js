@@ -1,18 +1,9 @@
-/*
-1 semver->semver.js 복사
-2 npm install chalk
-3 lines-and-columns->dist 폴더 복사
-*/
-
 // 모듈 불러오기
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
 var session = require('express-session'); // session 객체
 var mysqlstore = require("express-mysql-session")(session);
-// npm install --save passport
-// npm install --save passport-local
-// npm install --save localStorage, local-storage 지워서 주기
 var passport = require('./passport.js');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -31,7 +22,7 @@ app.use(session({
 	saveUninitialized: false, // 로그인 기준으로 세션 생성
 	store: new mysqlstore({
 		host : 'localhost',
-		port : 3307,
+		port : 3306,
 		user : 'root',
 		password : '1111',
 		database : 'project'
@@ -43,6 +34,7 @@ app.use(passport.session());
 // 회원 관리 & 일정 관리 라우팅
 var userRouter = require('./routes/user'); // 회원 관리
 var calendarRouter = require('./routes/calendar'); // 일정 관리
+var calendarRouter = require('./routes/calendar');
 app.use('/api/user', userRouter);
 app.use('/api/calendar', calendarRouter);
 

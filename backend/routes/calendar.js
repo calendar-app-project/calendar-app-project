@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var db = mysql.createConnection({
 	host : 'localhost',
-	port : 3307,
+	port : 3306,
 	user : 'root',
 	password : '1111',
 	database : 'project'
@@ -20,8 +20,6 @@ db.connect();
 
 // 1. 일정 등록
 router.post('/:id', function(req, res) {
-	//var getValue = localStorage.getItem('test');
-	//console.log(localStorage);
 	var id = req.params.id;
 	var title = req.body.title;
 	var year = req.body.year;
