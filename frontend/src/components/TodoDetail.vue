@@ -50,7 +50,7 @@ export default ({
             editStatus:false,
             title: this.todoInfo.title,
             startHour: this.todoInfo.start_hour,
-            startMinute: this.todoInfo.start_minute,
+            startMinute: this.todoInfo.start_minute, 
             endHour: this.todoInfo.end_hour,
             endMinute: this.todoInfo.end_minute,
             memo: this.todoInfo.memo
@@ -84,7 +84,6 @@ export default ({
                 }
                 const editData = {
                     post_id: this.todoInfo.post_id,
-                    date: this.todoInfo.date,
                     ...userData
                 }
                 await this.$store.dispatch('todo/editSchedule', editData);

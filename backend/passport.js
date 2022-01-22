@@ -61,11 +61,11 @@ passport.use('local-login', new LocalStrategy({
 												console.log(err);
 												return done(err);
 											} else {
-												console.log("중복되는 세션 업데이트 완료");
+												// console.log("중복되는 세션 업데이트 완료");
 											}
 										}); // sql문
 									} else {
-										console.log("중복되는 세션 없음");
+										// console.log("중복되는 세션 없음");
 									}
 								}
 							}); // sql문

@@ -39,6 +39,7 @@ export default {
             state.todos = state.todos.filter(todo => todo.post_id !== id);
         },
         updateTodo(state, {postId, editData}){
+            console.log(editData);
             const idx = state.todos.findIndex((el) => el.post_id === postId);
             state.todos.splice(idx,1,editData);
         },
@@ -62,7 +63,6 @@ export default {
                 const id = rootState.user.userId;
                 const res = await getTodo(id, state.date.year, state.date.month);
                 if(res.data.resultData.showSchedule){
-                    ('get결과:', res.data.array)
                     await commit('setTodos', res.data.array);
                 }
             }catch(err){
@@ -81,12 +81,10 @@ export default {
         },
         async editSchedule({commit}, payload){
             try {
-                //const { postId, editData } = payload;
                 const res = await editTodo(payload.post_id, payload);
                 if(res.data.resultData.editTodo){
                     await commit('updateTodo', {
-                        postId: payload.post_id,
-                        editData: payload
+                        editData: res.data.editData
                     });
                 }
             }catch(err){

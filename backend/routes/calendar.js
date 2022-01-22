@@ -158,9 +158,29 @@ router.put('/:post_id', function(req, res) {
 			res.status(500);
 		} else {
 			resultData.editTodo = true; // 일정 수정 성공
-			res.status(200).json({
-				resultData,
-				message : "edit todo data success"});
+
+			var sql2 = 'select post_id, month, date, title, start_hour, start_minute, end_hour, end_minute, memo from Schedule where post_id=?';
+			db.query(sql2, [post_id], function(err, rows2, fields) {
+				if(err) {
+					console.log(err);
+					res.status(500);
+				} else {
+					editData = {}; // 보내줄 데이터
+					editData.post_id = post_id;
+					editData.month = rows2[0].month;
+					editData.date = rows2[0].date;
+					editData.title = rows2[0].title;
+					editData.start_hour = rows2[0].start_hour;
+					editData.start_minute = rows2[0].start_minute;
+					editData.end_hour = rows2[0].end_hour;
+					editData.end_minute = rows2[0].end_minute;
+					editData.memo = rows2[0].memo;
+					res.status(200).json({
+						editData,
+						resultData,
+						message : "edit todo data success"});
+				}
+			}); // sql문
 		}
 	}); // sql문
 });

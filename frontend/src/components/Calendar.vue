@@ -84,7 +84,6 @@ export default ({
             date:0,
             currentYear:0,
             currentMonth:0,
-            currentDate:0,
             lastMonthLastDate:0,
             lastMonthLastDay:0,
             thisMonthLastDate:0,

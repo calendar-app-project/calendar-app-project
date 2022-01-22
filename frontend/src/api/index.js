@@ -18,9 +18,8 @@ function logoutUser() {
 //회원탈퇴 api
 function leaveUser(userData) {
     return axios.delete('/api/user/leave', {
-        data: {
-            userData : userData}
-        })
+        data: userData
+    })
 }
 
 //일정 등록 api

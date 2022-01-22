@@ -127,7 +127,7 @@ router.delete('/leave', function(req, res) {
 		// console.log("localStorage값");
 	}
 
-	var password = req.body.userData.password;
+	var password = req.body.password;
 	let resultData = {};
 
 	var sql = 'select * from User where id=?';
