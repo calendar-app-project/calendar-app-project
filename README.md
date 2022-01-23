@@ -1,5 +1,6 @@
 # calendar-app-project
-
+자신만의 일정을 관리해주는 캘린더 Todo App
+////더 좋은 설명 추천받아요,,
 
 # used
 ### [frontend]
