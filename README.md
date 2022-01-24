@@ -1,5 +1,5 @@
 # 📆 calendar-app-project
-사이트에 로그인한 회원이 자신만의 일정을 자유롭게 관리할 수 있는 캘린더 Todo App
+자신만의 일정을 자유롭게 관리할 수 있는 캘린더 Todo App
 
 # used - tech stack
 ### [frontend]
