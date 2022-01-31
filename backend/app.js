@@ -21,11 +21,11 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false, // 로그인 기준으로 세션 생성
 	store: new mysqlstore({
-		host : 'localhost',
+		host : 'us-cdbr-east-05.cleardb.net',
 		port : 3306,
-		user : 'root',
-		password : '1111',
-		database : 'project'
+		user : 'b6b815ef929007',
+		password : '5e99885f',
+		database : 'heroku_0906e041561414a'
 		})
 }));
 app.use(passport.initialize()); // passport setting

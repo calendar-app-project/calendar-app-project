@@ -10,11 +10,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var db = mysql.createConnection({
-	host : 'localhost',
+	host : 'us-cdbr-east-05.cleardb.net',
 	port : 3306,
-	user : 'root',
-	password : '1111',
-	database : 'project'
+	user : 'b6b815ef929007',
+	password : '5e99885f',
+	database : 'heroku_0906e041561414a'
 });
 db.connect();
 
