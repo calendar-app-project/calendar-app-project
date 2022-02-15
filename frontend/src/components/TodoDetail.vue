@@ -62,10 +62,7 @@ export default ({
         },
         convertTime(time) {
             time = Number(time);
-            if(time % 10 === time){
-                return String(time).padStart(2,'0');
-            }
-            if(time){
+            if(time<10 || !time){
                 return String(time).padStart(2,'0');
             }
             else{

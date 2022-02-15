@@ -13,7 +13,7 @@ import { mapState } from 'vuex';
 export default ({
     props:['result', 'showSearchResult'],
     computed: {
-        ...mapState('todo',['todos','date','searchData']),
+        ...mapState('todo',['today','searchData']),
     },
     watch:{
         showSearchResult(){
@@ -32,8 +32,8 @@ export default ({
         },
         find(searchTodo){
             this.$store.dispatch('todo/setSearchSchedule', searchTodo);
-            if(!(this.searchData.year === this.date.year 
-                 && this.searchData.month === this.date.month)){
+            if(!(this.searchData.year === this.today.year 
+                 && this.searchData.month === this.today.month)){
                 location.reload();
             }
         }

@@ -93,7 +93,7 @@ export default ({
     },
     watch: {
         clickedDate(){
-            if(this.modalStatus===false){
+            if(!this.modalStatus){
                 this.deleteClickedDate();
             }
         }
@@ -167,9 +167,11 @@ export default ({
 
             this.dates =[];
 
-            if(this.searchData.postId!==0){
+            if(this.searchData.postId){
                 this.currentYear = this.searchData.year;
                 this.currentMonth = this.searchData.month-1;
+                setTimeout(() =>
+                        this.resetSearchData(), 3000);
             }
             if(param === 1){
                 this.currentMonth++;
@@ -204,11 +206,6 @@ export default ({
                 //todo 요청
                 this.deleteTodosPerMth();
                 this.getSchedule();
-                
-                if(this.searchData.postId!==0){
-                    setTimeout(() =>
-                        this.resetSearchData(), 3000);
-                }
             }
             return this.dates;
         },

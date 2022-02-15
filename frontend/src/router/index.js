@@ -4,7 +4,6 @@ import Login from '../views/Login.vue';
 import Join from '../views/Join.vue';
 import Profile from '../views/Profile.vue';
 
-
 export default createRouter({
     history: createWebHistory(),
     routes: [

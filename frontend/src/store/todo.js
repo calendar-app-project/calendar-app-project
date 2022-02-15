@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: () => {
         return {
-            date:{},
+            today:{},
             clickedDate:0,
             todos:[],
             searchData:{
@@ -21,7 +21,7 @@ export default {
     },
     mutations: {
         setDate(state, payload){
-            state.date = {
+            state.today = {
                year: payload.year,
                month: payload.month
             };
@@ -39,7 +39,6 @@ export default {
             state.todos = state.todos.filter(todo => todo.post_id !== id);
         },
         updateTodo(state, {postId, editData}){
-            console.log(editData);
             const idx = state.todos.findIndex((el) => el.post_id === postId);
             state.todos.splice(idx,1,editData);
         },
@@ -61,7 +60,7 @@ export default {
         async getSchedule({state, commit, rootState}){
             try{
                 const id = rootState.user.userId;
-                const res = await getTodo(id, state.date.year, state.date.month);
+                const res = await getTodo(id, state.today.year, state.today.month);
                 if(res.data.resultData.showSchedule){
                     await commit('setTodos', res.data.array);
                 }

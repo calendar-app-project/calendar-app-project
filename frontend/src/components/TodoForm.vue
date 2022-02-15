@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default ({
     data() {
@@ -44,13 +44,9 @@ export default ({
         ...mapState("todo", ["date","clickedDate"]),
     },
     methods: {
-         ...mapMutations('todo', ['updateTodos']),
         convertTime(time) {
             time = Number(time);
-            if(time % 10 === time){
-                return String(time).padStart(2,'0');
-            }
-            if(time === null){
+            if(time<10 || !time){
                 return String(time).padStart(2,'0');
             }
             else{

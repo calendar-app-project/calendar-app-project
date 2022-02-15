@@ -44,8 +44,6 @@
 <script>
 import { logoutUser,searchTodo } from '../api/index';
 import SearchItem from './SearchItem.vue';
-import { mapState } from 'vuex';
-
 
 export default ({
     components:{
@@ -60,7 +58,6 @@ export default ({
         }
     }, 
     computed: {
-        ...mapState('todo',['todos']),
         isLogin() {
             return this.$store.state.user.isLogin
         },

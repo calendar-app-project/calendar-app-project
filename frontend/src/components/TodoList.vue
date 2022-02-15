@@ -5,7 +5,6 @@
           <p>{{ clickedDate + '일' }}</p>
           <div class="todoList" v-if="filterTodos">
             <div class="todo" v-for="(todo,idx) in filterTodos" :key="idx">
-              <!--<input class="form-check-input" type="checkbox" id="flexCheck">-->
               <span @click="showDetail(todo)">{{ todo.title }}</span>
             </div>
           </div>
@@ -39,7 +38,7 @@ export default ({
       }
     },
   computed: {
-    ...mapState('todo', ['clickedDate','todos']),
+    ...mapState('todo', ['clickedDate']),
     ...mapGetters('todo', ['filterTodos']),
     },
   methods: {
