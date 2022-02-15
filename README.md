@@ -1,6 +1,10 @@
 # 📆 calendar-app-project
 자신만의 일정을 자유롭게 관리할 수 있는 캘린더 Todo App
 
+# 배포
+### 진행 중 . . .
+
+
 # used - tech stack
 ### [frontend]
 - webpack
@@ -10,9 +14,6 @@
 ### [backend]
 - node.js
 - database(MySQL)
-
-### [server]
-// - 사용할 서버
 
 # 기능 구현
 - 회원가입 / 회원탈퇴
